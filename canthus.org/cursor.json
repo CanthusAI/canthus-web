@@ -1,0 +1,39 @@
+{
+    "project_name": "Canthus website - Backend and Frontend Monorepo",
+    "project_description": "A monorepo for the website for the company 'canthus' which is hosted at 'canthus.org'",
+    "company": {
+        "name": "Canthus",
+        "website": "canthus.org",
+        "description": "Canthus is a company that provides a accessibility tooling for vertical SaaS platforms."
+    },
+    "goals": {
+        "landing_page": "High conversion landing page with clear value adds for our ICPs",
+        "a11y_tools": "Accessibility tooling for vertical SaaS platforms that meets compliance standards and improves customer experience"
+    },
+    "sections": {
+        "frontend": {
+            "description": "Website built with react, serves a landing page and the actual app which lets clients log in and see usage and tolls they have or have not used.",
+            "path": "client",
+            "tech_stack": "React + Vite w/ Tailwind CSS and shadcn/ui"
+        },
+        "backend": {
+            "description": "The frontend is built with React + Vite w/ Tailwind CSS and shadcn/ui",
+            "path": "client",
+            "tech_stack": "React + Vite w/ Tailwind CSS and shadcn/ui"
+        },
+        "database": {
+            "description": "Postgres Database, done over network to Neon",
+            "path": "N/A",
+            "tech_stack": "PostgreSQL, Neon"
+        }
+    },
+    "constraints": [
+        "No new runtime deps without approval",
+        "Prefer stdlib or bun libs and existing utils, create util functions if needed",
+        "Use biome for linting and formatting"
+    ],
+    "prefer": {
+        "testing": "Vitest + Testing Library",
+        "date": "Temporal (polyfill)"
+    }
+}

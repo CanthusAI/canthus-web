@@ -1,0 +1,4 @@
+- Use `bun` for everything, do not use npm or alternatives.
+- When installing something, ensure you are in the correct directory.
+- Never commit secrets. If env var is new, update .env.example and docs/README.md.
+- Always include tests for bug fixes and new features, in the backend(server), or shared.

@@ -6,22 +6,25 @@ const insights = [
         icon: TrendingUp,
         title: "Growing Market Need",
         stat: "71%",
-        description: "of companies face accessibility lawsuits due to non-compliant platforms",
-        source: "WebAIM 2024 Report"
+        description: "71% of companies face accessibility lawsuits due to non-compliant platforms",
+        source: "WebAIM 2024 Report",
+        url: "https://webaim.org/projects/"
     },
     {
         icon: Shield,
         title: "Compliance Gap",
         stat: "98%",
-        description: "of top websites fail basic accessibility standards",
-        source: "WebAIM Million Analysis"
+        description: "98% of top websites fail basic accessibility standards",
+        source: "WebAIM Million Analysis",
+        url: "https://webaim.org/projects/million/"
     },
     {
         icon: Target,
         title: "Revenue Opportunity",
         stat: "$13T",
-        description: "global spending power of people with disabilities",
-        source: "Return on Disability Report"
+        description: "The global spending power of people with disabilities",
+        source: "Return on Disability Report",
+        url: "https://www.rod-group.com/research-insights/annual-report-2024/"
     }
 ];
 
@@ -43,7 +46,7 @@ export default function MarketInsights() {
                                 {insight.description}
                             </p>
                             <p className="text-xs text-muted-foreground font-medium">
-                                Source: {insight.source}
+                                Source: <a href={insight.url} target="_blank" rel="noopener noreferrer" className="font-bold text-primary hover:underline">{insight.source}</a>
                             </p>
                         </CardContent>
                     </Card>

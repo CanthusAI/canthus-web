@@ -1,13 +1,27 @@
-import { Outlet } from "@tanstack/react-router";
+import { Outlet, useMatchRoute } from "@tanstack/react-router";
 import NavBar from "@/components/landing/nav/nav-bar";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Footer from "../landing/sections/footer";
+import TitleSync from "@/components/seo/title-sync";
 
 export default function RootLayout() {
     const isMobile = useIsMobile();
+    const matchRoute = useMatchRoute();
+    const isApp = matchRoute({ to: "/app", fuzzy: true });
+
+    if (isApp) {
+        return (
+            <>
+                <Outlet />
+                <TanStackRouterDevtools position="bottom-right" />
+            </>
+        );
+    }
+
     return (
         <>
+            <TitleSync />
             <header className={`fixed top-0 left-0 right-0 z-50 ${isMobile
                 ? "bg-background/80 backdrop-blur-sm border-b"
                 : "bg-background/60 backdrop-blur-md mx-4 mt-4 rounded-xl border shadow-lg"
@@ -22,7 +36,7 @@ export default function RootLayout() {
             </main>
 
             <Footer />
-            <TanStackRouterDevtools />
+            <TanStackRouterDevtools position="bottom-right" />
         </>
     );
 }

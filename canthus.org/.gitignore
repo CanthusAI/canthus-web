@@ -19,6 +19,11 @@ build
 .env.test.local
 .env.production.local
 .env*.local
+# Ignore staging/production env files across the repo
+.env.staging
+.env.production
+.env.*
+!.env.example
 
 # logs
 npm-debug.log*

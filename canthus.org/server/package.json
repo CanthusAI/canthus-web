@@ -5,9 +5,14 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "bun --watch run src/index.ts && tsc --watch"
+    "dev": "bun --watch --env-file=.env.development run src/index.ts && tsc --watch",
+    "dev:staging": "bun --watch --env-file=.env.staging run src/index.ts && tsc --watch",
+    "start:staging": "bun --env-file=.env.staging run dist/index.js",
+    "start:prod": "bun --env-file=.env.production run dist/index.js",
+    "test": "bun test"
   },
   "dependencies": {
+    "@workos-inc/node": "^7.69.2",
     "hono": "^4.7.11",
     "shared": "workspace:*"
   },

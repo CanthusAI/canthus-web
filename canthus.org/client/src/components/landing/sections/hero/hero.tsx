@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Play } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { HeroVideoDialog } from "./hero-video-dialog";
 
 export default function Hero() {
@@ -11,7 +11,7 @@ export default function Hero() {
             One-Click Clarity for{" "}
             <span className="relative">
               <span className="relative z-10">Everyone</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-400 to-white dark:to-black blur-md opacity-35"></span>
+              <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-background blur-md opacity-35"></span>
             </span>
           </h1>
           <p className="text-muted-foreground text-balance md:text-lg">

@@ -13,7 +13,7 @@ export const Route = createFileRoute('/pricing/')({
 
 function RouteComponent() {
     const [duration, setDuration] = useState<PricingDuration>('monthly')
-    
+
     return (
         <div className="min-h-screen">
             <section className="py-16 md:py-20 lg:py-32">

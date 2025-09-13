@@ -1,5 +1,5 @@
 import { Instagram, Mail, MapPin, Twitter, Linkedin, Github } from "lucide-react";
-import beaver from "@/assets/beaver.svg";
+import fish from "@/assets/fish.svg";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
@@ -11,7 +11,7 @@ export default function Footer() {
                     {/* Company Info */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
-                            <img src={beaver} alt="Canthus logo" className="w-8 h-8" />
+                            <img src={fish} alt="Canthus logo" className="w-8 h-8" />
                             <span className="font-bold text-xl">Canthus</span>
                         </div>
                         <p className="text-sm text-muted-foreground max-w-xs">

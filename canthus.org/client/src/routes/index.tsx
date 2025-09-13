@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { hcWithType } from "server/dist/client";
+import { client } from "@/lib/api/client";
 import { useMutation } from "@tanstack/react-query";
 import Hero from "@/components/landing/sections/hero/hero";
 import { cn } from "@/lib/utils";
@@ -9,35 +9,24 @@ import { StarsBackground } from "@/components/ui/stars";
 import { useTheme } from "@/components/ui/theme-provider";
 import ImpactStats from "@/components/landing/sections/impact/impact-stats";
 import MarketInsights from "@/components/landing/sections/impact/market-insights";
-import Integrations from "@/components/landing/sections/features/integrations";
-import Footer from "@/components/landing/sections/footer";
 import IntegrationsSmall from "@/components/landing/sections/features/integrations-small";
+
 
 export const Route = createFileRoute("/")({
 	component: Index,
 });
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
-
-const client = hcWithType(SERVER_URL);
-
-type ResponseType = Awaited<ReturnType<typeof client.hello.$get>>;
+type ResponseType = { message: string; success: true };
 
 function Index() {
-	const [data, setData] = useState<
-		Awaited<ReturnType<ResponseType["json"]>> | undefined
-	>();
+	const [data, setData] = useState<ResponseType | undefined>();
 
 	const { mutate: sendRequest } = useMutation({
 		mutationFn: async () => {
 			try {
 				const res = await client.hello.$get();
-				if (!res.ok) {
-					console.log("Error fetching data");
-					return;
-				}
-				const data = await res.json();
-				setData(data);
+				const json = await res.json() as ResponseType;
+				setData(json);
 			} catch (error) {
 				console.log(error);
 			}
@@ -66,7 +55,7 @@ function Index() {
 							Making an{" "}
 							<span className="relative">
 								<span className="relative z-10">impact</span>
-								<span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-400 to-white dark:to-black blur-md opacity-20"></span>
+								<span className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-background blur-md opacity-20"></span>
 							</span>
 						</h2>
 						<p className="text-muted-foreground max-w-2xl mx-auto text-lg">

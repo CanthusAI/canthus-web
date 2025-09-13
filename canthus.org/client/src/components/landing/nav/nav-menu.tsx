@@ -8,6 +8,7 @@ const items = [
 
 export default function NavMenu() {
     return (
+
         <NavigationMenu>
             <NavigationMenuList className="flex items-center gap-4">
                 {items.map((item) => (

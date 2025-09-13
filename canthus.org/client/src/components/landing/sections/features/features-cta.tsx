@@ -1,6 +1,6 @@
 export default function FeaturesCTA() {
     return (
-        <div className="text-center bg-gradient-to-r from-blue-50/20 to-purple-50/20 dark:from-blue-950/20 dark:to-purple-950/20 rounded-2xl p-8 md:p-12">
+        <div className="mt-32 text-center bg-gradient-to-r from-blue-50/20 to-purple-50/20 dark:from-blue-950/20 dark:to-purple-950/20 rounded-2xl p-8 md:p-12">
             <h3 className="text-2xl font-bold mb-4">
                 Ready to make your platform accessible to everyone?
             </h3>

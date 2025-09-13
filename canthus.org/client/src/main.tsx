@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/ui/theme-provider"
+import { AuthProvider } from "@/components/auth/context";
 import "./index.css";
 
 const queryClient = new QueryClient();
@@ -35,7 +36,9 @@ if (!rootElement.innerHTML) {
 		<StrictMode>
 			<QueryClientProvider client={queryClient}>
 				<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-					<RouterProvider router={router} />
+					<AuthProvider>
+						<RouterProvider router={router} />
+					</AuthProvider>
 				</ThemeProvider>
 			</QueryClientProvider>
 		</StrictMode>,

@@ -10,7 +10,7 @@ export default function FeaturesHeader() {
                 Platform accessibility{" "}
                 <span className="relative">
                     <span className="relative z-10">made simple</span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-400 to-white dark:to-black blur-md opacity-20"></span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-background blur-md opacity-20"></span>
                 </span>
             </h2>
             <p className="text-muted-foreground text-balance md:text-lg max-w-3xl mx-auto">

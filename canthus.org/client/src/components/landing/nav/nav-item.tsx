@@ -4,6 +4,7 @@ import {
     NavigationMenuLink,
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { useNavigate } from "@tanstack/react-router";
 
 export interface NavItemProps {
     text: string;
@@ -12,6 +13,7 @@ export interface NavItemProps {
 }
 
 export default function NavItem({ text, href, items }: NavItemProps) {
+    const navigate = useNavigate();
     if (items && items.length > 0) {
         return (
             <NavigationMenuItem className="rounded hover:text-lg">
@@ -19,7 +21,7 @@ export default function NavItem({ text, href, items }: NavItemProps) {
                 <NavigationMenuContent>
                     <div className="grid gap-2 p-2">
                         {items.map((item) => (
-                            <NavigationMenuLink key={item.href} href={item.href}>
+                            <NavigationMenuLink key={item.href} onClick={() => navigate({ to: item.href })}>
                                 {item.text}
                             </NavigationMenuLink>
                         ))}
@@ -31,7 +33,7 @@ export default function NavItem({ text, href, items }: NavItemProps) {
 
     return (
         <NavigationMenuItem>
-            <NavigationMenuLink className="px-2 text-md rounded-lg hover:bg-accent/90" href={href}>{text}</NavigationMenuLink>
+            <NavigationMenuLink className="px-2 text-md rounded-lg hover:bg-accent/90 hover:cursor-pointer" onClick={() => navigate({ to: href })}>{text}</NavigationMenuLink>
         </NavigationMenuItem>
     );
 }

@@ -9,7 +9,7 @@ interface IntegrationsProps {
 
 export default function Integrations({ showTitle = true }: IntegrationsProps) {
     return (
-        <div className="text-center mb-12 mt-24">
+        <div className="text-center mb-12 mt-48">
             {showTitle && (
                 <>
                     <h1 className="text-4xl font-bold tracking-tight mb-4">

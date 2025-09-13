@@ -9,10 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PricingIndexRouteImport } from './routes/pricing/index'
 import { Route as FeaturesIndexRouteImport } from './routes/features/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -28,39 +36,79 @@ const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
   path: '/features/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/auth/callback': typeof AuthCallbackRoute
+  '/app/': typeof AppIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/pricing': typeof PricingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/app': typeof AppIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/pricing': typeof PricingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/auth/callback': typeof AuthCallbackRoute
+  '/app/': typeof AppIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/pricing/': typeof PricingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/features' | '/pricing'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/auth/callback'
+    | '/app/'
+    | '/features'
+    | '/pricing'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/features' | '/pricing'
-  id: '__root__' | '/' | '/features/' | '/pricing/'
+  to: '/' | '/auth/callback' | '/app' | '/features' | '/pricing'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/auth/callback'
+    | '/app/'
+    | '/features/'
+    | '/pricing/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AuthCallbackRoute: typeof AuthCallbackRoute
   FeaturesIndexRoute: typeof FeaturesIndexRoute
   PricingIndexRoute: typeof PricingIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -82,11 +130,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AuthCallbackRoute: AuthCallbackRoute,
   FeaturesIndexRoute: FeaturesIndexRoute,
   PricingIndexRoute: PricingIndexRoute,
 }

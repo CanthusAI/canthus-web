@@ -32,9 +32,11 @@ import {
     Users,
     Search,
     Activity,
+    Code,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/context";
 import { NavUser } from "./user-nav";
+import { useNavigate } from "@tanstack/react-router";
 
 
 interface SidebarItem {
@@ -58,7 +60,7 @@ const sidebarItems: SidebarItem[] = [
         id: "overview",
         label: "Overview",
         icon: BarChart3,
-        route: "/app/overview",
+        route: "/app",
         hasSubItems: false,
     },
     {
@@ -219,6 +221,7 @@ export function AppSidebar() {
     const [selectedSubItem, setSelectedSubItem] = useState<string | null>(null);
 
     const activeItemData = sidebarItems.find((item) => item.id === activeItem);
+    const navigate = useNavigate();
 
     const handleItemClick = (item: SidebarItem) => {
         if (item.hasSubItems) {
@@ -232,7 +235,7 @@ export function AppSidebar() {
                 setActiveItem(null);
                 setSelectedSubItem(null);
             }
-            console.log(`[v0] Navigating to: ${item.route}`);
+            navigate({ to: item.route });
         }
     };
 
@@ -306,6 +309,22 @@ export function AppSidebar() {
                                         </SidebarMenuItem>
                                     );
                                 })}
+                                {process.env.NODE_ENV === "development" && (
+                                    <SidebarMenuItem key="api-client" onClick={() => navigate({ to: "/app/api-client" })} className="cursor-pointer">
+                                        <SidebarMenuButton
+                                            isActive={false}
+                                            className="w-full h-10 px-3"
+                                        >
+                                            <div className="flex items-center gap-3 flex-1 min-w-0">
+                                                <Code className="h-4 w-4 shrink-0" />
+                                                <span className="truncate">API Client</span>
+                                            </div>
+                                            <div className="flex items-center gap-1 shrink-0 ml-auto min-w-fit">
+                                                <ChevronRight className="h-4 w-4 shrink-0" />
+                                            </div>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                )}
                             </SidebarMenu>
                         </SidebarGroupContent>
                     </SidebarGroup>

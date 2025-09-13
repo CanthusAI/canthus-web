@@ -15,6 +15,7 @@ import { Route as PricingIndexRouteImport } from './routes/pricing/index'
 import { Route as FeaturesIndexRouteImport } from './routes/features/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as AppApiClientIndexRouteImport } from './routes/app/api-client/index'
 
 const AppRoute = AppRouteImport.update({
   id: '/app',
@@ -46,6 +47,11 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppApiClientIndexRoute = AppApiClientIndexRouteImport.update({
+  id: '/api-client/',
+  path: '/api-client/',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/pricing': typeof PricingIndexRoute
+  '/app/api-client': typeof AppApiClientIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/features': typeof FeaturesIndexRoute
   '/pricing': typeof PricingIndexRoute
+  '/app/api-client': typeof AppApiClientIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/features/': typeof FeaturesIndexRoute
   '/pricing/': typeof PricingIndexRoute
+  '/app/api-client/': typeof AppApiClientIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -80,8 +89,15 @@ export interface FileRouteTypes {
     | '/app/'
     | '/features'
     | '/pricing'
+    | '/app/api-client'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/callback' | '/app' | '/features' | '/pricing'
+  to:
+    | '/'
+    | '/auth/callback'
+    | '/app'
+    | '/features'
+    | '/pricing'
+    | '/app/api-client'
   id:
     | '__root__'
     | '/'
@@ -90,6 +106,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/features/'
     | '/pricing/'
+    | '/app/api-client/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,15 +161,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/api-client/': {
+      id: '/app/api-client/'
+      path: '/api-client'
+      fullPath: '/app/api-client'
+      preLoaderRoute: typeof AppApiClientIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
+  AppApiClientIndexRoute: typeof AppApiClientIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
+  AppApiClientIndexRoute: AppApiClientIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

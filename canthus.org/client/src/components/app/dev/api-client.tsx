@@ -77,7 +77,7 @@ export default function ApiClientPanel() {
     }, []);
 
     return (
-        <Card className="w-[min(95vw,900px)] shadow-lg">
+        <Card className="w-full shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>API Client</CardTitle>
                 <div className="flex items-center gap-2">

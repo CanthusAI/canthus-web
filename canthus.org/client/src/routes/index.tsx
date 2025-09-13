@@ -1,9 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import beaver from "@/assets/beaver.svg";
 import { Button } from "@/components/ui/button";
 import { hcWithType } from "server/dist/client";
 import { useMutation } from "@tanstack/react-query";
+import Hero from "@/components/landing/sections/hero/hero";
+import { cn } from "@/lib/utils";
+import { StarsBackground } from "@/components/ui/stars";
+import { useTheme } from "@/components/ui/theme-provider";
+import HeroGridList from "@/components/landing/sections/hero/hero-grid-list";
+import Footer from "@/components/landing/sections/footer";
 
 export const Route = createFileRoute("/")({
 	component: Index,
@@ -37,21 +42,22 @@ function Index() {
 	});
 
 	return (
-		<div className="max-w-xl mx-auto flex flex-col gap-6 items-center justify-center min-h-screen">
-			<a
-				href="https://github.com/stevedylandev/bhvr"
-				target="_blank"
-				rel="noopener"
-			>
-				<img
-					src={beaver}
-					className="w-16 h-16 cursor-pointer"
-					alt="beaver logo"
-				/>
-			</a>
-			<h1 className="text-5xl font-black">bhvr</h1>
-			<h2 className="text-2xl font-bold">Bun + Hono + Vite + React</h2>
-			<p>A typesafe fullstack monorepo</p>
+		<div className="w-full mx-auto flex flex-col gap-6 items-center">
+			<StarsBackground
+				starColor={useTheme().theme === 'dark' ? '#FFF' : '#000'}
+				className={cn(
+					'absolute inset-0 flex items-center justify-center rounded-xl z-[-1]',
+					'dark:bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] dark:from-[#262626] dark:via-[#262626] dark:to-transparent bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#f5f5f5] via-[#f5f5f5] to-transparent',
+				)}
+			/>
+			<div className="mt-20">
+				<Hero />
+			</div>
+
+			<div className="mx-auto mt-8">
+
+				<HeroGridList />
+			</div>
 			<div className="flex items-center gap-4">
 				<Button onClick={() => sendRequest()}>Call API</Button>
 				<Button variant="secondary" asChild>
@@ -68,6 +74,8 @@ function Index() {
 					</code>
 				</pre>
 			)}
+			<div className="mt-48"></div>
+			<Footer />
 		</div>
 	);
 }

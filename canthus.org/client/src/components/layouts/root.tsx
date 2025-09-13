@@ -2,6 +2,7 @@ import { Outlet } from "@tanstack/react-router";
 import NavBar from "@/components/landing/nav/nav-bar";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useIsMobile } from "@/hooks/use-mobile";
+import Footer from "../landing/sections/footer";
 
 export default function RootLayout() {
     const isMobile = useIsMobile();
@@ -20,6 +21,7 @@ export default function RootLayout() {
                 </div>
             </main>
 
+            <Footer />
             <TanStackRouterDevtools />
         </>
     );

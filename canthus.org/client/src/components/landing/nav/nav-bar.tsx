@@ -3,6 +3,7 @@ import beaver from "@/assets/beaver.svg";
 import NavMenu from "./nav-menu";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { Lock } from "lucide-react";
 
 export default function NavBar({ isMobile }: { isMobile: boolean }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,8 +22,16 @@ export default function NavBar({ isMobile }: { isMobile: boolean }) {
                 </div>
 
                 {!isMobile && (
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-8">
                         <NavMenu />
+                        <div className="flex items-center gap-3 pl-4 border-l">
+                            <Button variant="outline" className="rounded-lg">
+                                <Lock size={16} /> Customer Login
+                            </Button>
+                            <Button className="bg-primary hover:bg-primary/90 rounded-lg">
+                                Sign up
+                            </Button>
+                        </div>
                     </div>
                 )}
 
@@ -42,9 +51,13 @@ export default function NavBar({ isMobile }: { isMobile: boolean }) {
                 <div className="py-4 border-t">
                     <nav className="flex flex-col gap-4">
                         <a href="/features" className="text-lg">Features</a>
+                        <a href="/about" className="text-lg">About</a>
                         <a href="/pricing" className="text-lg">Pricing</a>
+                        <Button variant="outline" className="rounded-lg w-fit">
+                            <Lock className="w-4 h-4" /> Customer Login
+                        </Button>
                         <Button className="bg-primary hover:bg-primary/90 rounded-lg w-fit">
-                            Log In
+                            Sign up
                         </Button>
                     </nav>
                 </div>

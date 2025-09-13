@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+import { ExternalLink, Play } from "lucide-react";
+import { HeroVideoDialog } from "./hero-video-dialog";
 
 export default function Hero() {
   return (
@@ -14,7 +15,7 @@ export default function Hero() {
             </span>
           </h1>
           <p className="text-muted-foreground text-balance md:text-lg">
-            Accessibility solutions, <span className="font-bold">built for the platforms your team already uses.</span>
+            Accessibility solutions <span className="font-bold">built for the platforms your team already uses.</span>
           </p>
         </div>
 
@@ -25,8 +26,8 @@ export default function Hero() {
             </Button>
             <Button asChild variant="outline" size="lg">
               <a href="#" className="flex items-center gap-2">
-                <Play className="h-4 w-4" />
-                Watch Demo
+                <ExternalLink className="h-4 w-4" />
+                Try Demo
               </a>
             </Button>
           </div>
@@ -36,12 +37,23 @@ export default function Hero() {
           </p>
 
           <div className="relative mt-8">
-            <div className="relative z-10 overflow-hidden">
-              <img
-                src="/images/demo.png"
-                alt="Demo preview"
-                className="w-full max-w-5xl h-auto shadow-2xl rounded-lg gradient-to-b from-blue-500 via-blue-400 to-white dark:to-black"
-              />
+            <div className="relative z-10 overflow-hidden group rounded-lg">
+              <div className="relative">
+                <HeroVideoDialog
+                  className="dark:hidden block"
+                  animationStyle="from-center"
+                  videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+                  thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
+                  thumbnailAlt="Hero Video"
+                />
+                <HeroVideoDialog
+                  className="hidden dark:block"
+                  animationStyle="from-center"
+                  videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+                  thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
+                  thumbnailAlt="Hero Video"
+                />
+              </div>
             </div>
           </div>
         </div>

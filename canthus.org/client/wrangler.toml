@@ -1,0 +1,17 @@
+name = "canthus-org"
+compatibility_date = "2024-01-15"
+
+# Cloudflare Pages configuration
+pages_build_output_dir = "dist"
+
+# Environment variables for build
+[env.production.vars]
+VITE_SERVER_URL = "https://canthus.org"
+VITE_API_BASE_URL = "https://api.canthus.org"
+NODE_ENV = "production"
+
+
+[env.preview.vars]
+VITE_SERVER_URL = "https://localhost:5173"
+VITE_API_BASE_URL = "https://localhost:3000"
+NODE_ENV = "development"

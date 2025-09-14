@@ -5,53 +5,60 @@ import { createAuthRoutes, withAuth } from "./auth";
 import type { ApiResponse } from "shared/dist";
 import { getAuthEnv } from "./types/auth/auth-env";
 
-const authEnv = getAuthEnv();
-const isProduction = process.env.NODE_ENV === 'production';
+export function createApp(env?: any) {
+	const authEnv = getAuthEnv(env);
+	const isProduction = (env?.NODE_ENV || process.env.NODE_ENV) === 'production';
 
-// Ensure CORS allows credentials and the specific client origin
-const allowedOrigin = (() => {
-	try {
-		return new URL(authEnv.APP_BASE_URL).origin;
-	} catch {
-		return authEnv.APP_BASE_URL;
-	}
-})();
-
-export const app = new Hono()
-	.use(cors({
-		origin: allowedOrigin,
-		credentials: true,
-		allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-		allowHeaders: ["Content-Type", "Authorization"],
-	}))
-	.get("/", (c) => {
-		return c.text("Hello Hono!");
-	})
-	.get("/hello", async (c) => {
-		const greeted = getCookie(c, "greeted");
-		if (!greeted) {
-			setCookie(c, "greeted", "true", {
-				httpOnly: true,
-				sameSite: "Lax",
-				path: "/",
-			});
+	// Ensure CORS allows credentials and the specific client origin
+	const allowedOrigin = (() => {
+		try {
+			return new URL(authEnv.APP_BASE_URL).origin;
+		} catch {
+			return authEnv.APP_BASE_URL;
 		}
-		const data: ApiResponse = {
-			message: greeted ? "Welcome back!" : "Hello Canthus!",
-			success: true,
-		};
-		return c.json(data, { status: 200 });
-	})
-	.get("/protected", async (c) => withAuth(c, {
-		authEnv,
-		secureCookie: isProduction,
-	}, async (c) => {
-		return c.text("Protected route", { status: 200 });
-	}))
-	.route("/auth", createAuthRoutes({
-		authEnv,
-		secureCookie: isProduction,
-	}));
+	})();
 
+	const app = new Hono()
+		.use(cors({
+			origin: allowedOrigin,
+			credentials: true,
+			allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+			allowHeaders: ["Content-Type", "Authorization"],
+		}))
+		.get("/", (c) => {
+			return c.text("Hello Hono!");
+		})
+		.get("/hello", async (c) => {
+			const greeted = getCookie(c, "greeted");
+			if (!greeted) {
+				setCookie(c, "greeted", "true", {
+					httpOnly: true,
+					sameSite: "Lax",
+					path: "/",
+				});
+			}
+			const data: ApiResponse = {
+				message: greeted ? "Welcome back!" : "Hello Canthus!",
+				success: true,
+			};
+			return c.json(data, { status: 200 });
+		})
+		.get("/protected", async (c) => withAuth(c, {
+			authEnv,
+			secureCookie: isProduction,
+		}, async (c) => {
+			return c.text("Protected route", { status: 200 });
+		}))
+		.route("/auth", createAuthRoutes({
+			authEnv,
+			secureCookie: isProduction,
+		}));
+
+	return app;
+}
+
+// For Cloudflare Workers, use createApp(env) with environment variables
+// For Node.js/Bun development, create app with process.env
+export const app = typeof process !== 'undefined' && process.env ? createApp() : createApp({});
 export default app;
-export type AppType = typeof app;
+export type AppType = ReturnType<typeof createApp>;

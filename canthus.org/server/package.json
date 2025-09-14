@@ -9,7 +9,10 @@
     "dev:staging": "bun --watch --env-file=.env.staging run src/index.ts && tsc --watch",
     "start:staging": "bun --env-file=.env.staging run dist/index.js",
     "start:prod": "bun --env-file=.env.production run dist/index.js",
-    "test": "bun test"
+    "test": "bun test",
+    "dev:workers": "wrangler dev",
+    "deploy:workers": "wrangler deploy",
+    "build:workers": "tsc && wrangler deploy --dry-run"
   },
   "dependencies": {
     "@workos-inc/node": "^7.69.2",
@@ -17,6 +20,7 @@
     "shared": "workspace:*"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "wrangler": "^4.36.0"
   }
 }

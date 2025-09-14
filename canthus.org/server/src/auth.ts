@@ -1,6 +1,6 @@
 import { Hono, type Context } from "hono";
 import { setCookie, getCookie, deleteCookie } from "hono/cookie";
-import { workos } from "./workos";
+import { createWorkOSClient } from "./workos";
 import type { AuthEnv } from "./types/auth/auth-env";
 import type { RefreshSessionResponse } from "@workos-inc/node";
 import type { Organization, OrganizationsResponse, User } from "shared/dist";
@@ -13,6 +13,7 @@ export type CreateAuthRoutesOptions = {
 
 export function createAuthRoutes(options: CreateAuthRoutesOptions) {
     const { secureCookie = true, authEnv } = options;
+    const workos = createWorkOSClient(authEnv.WORKOS_API_KEY, authEnv.WORKOS_CLIENT_ID);
 
     const router = new Hono()
         // Login initiates the AuthKit flow
@@ -102,7 +103,7 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                 if (!result.authenticated) {
                     return c.json({ authenticated: false }, 401);
                 }
-                const orgs = await getOrganizations(result.user.id);
+                const orgs = await getOrganizations(result.user.id, workos);
                 if (!orgs.authenticated) {
                     return c.json(orgs, 401);
                 }
@@ -135,7 +136,7 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                 }
 
                 const userId = result.user.id;
-                const orgs = await getOrganizations(userId);
+                const orgs = await getOrganizations(userId, workos);
                 if (!orgs.authenticated) {
                     return c.json(orgs, 401);
                 }
@@ -151,13 +152,13 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
 }
 
 
-async function getOrganizations(userId: string): Promise<OrganizationsResponse> {
+async function getOrganizations(userId: string, workosClient: any): Promise<OrganizationsResponse> {
 
-    const memberships = await workos.userManagement.listOrganizationMemberships({
+    const memberships = await workosClient.userManagement.listOrganizationMemberships({
         userId,
     });
 
-    const organizations: Organization[] = memberships.data.map((m) => ({
+    const organizations: Organization[] = memberships.data.map((m: any) => ({
         id: m.organizationId,
         name: m.organizationName,
         status: m.status,
@@ -182,6 +183,7 @@ export async function withAuth(
     if (!sessionData) {
         return c.redirect('/login');
     }
+    const workos = createWorkOSClient(options.authEnv.WORKOS_API_KEY, options.authEnv.WORKOS_CLIENT_ID);
     const session = workos.userManagement.loadSealedSession({
         sessionData: sessionData,
         cookiePassword: options.authEnv.WORKOS_COOKIE_PASSWORD,

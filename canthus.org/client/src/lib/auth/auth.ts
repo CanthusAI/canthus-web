@@ -5,12 +5,13 @@ import type { AuthMeResponse, User } from "shared/dist";
 
 
 function getBaseUrl() {
-    (import.meta as any).env?.API_BASE_URL as string ?? "https://api.canthus.org"
+    (import.meta as any).env?.VITE_API_BASE_URL as string ?? "https://api.canthus.org"
 }
 
 function redirectTo(path: string) {
     const base = getBaseUrl();
-    window.location.href = `${base}${path}`;
+    const navigate = useNavigate();
+    navigate({ href: `${base}${path}`, reloadDocument: true });
 }
 
 export async function amILoggedIn(): Promise<boolean> {
@@ -37,9 +38,8 @@ export async function myProfile(): Promise<User | null> {
 }
 
 export function logIn(): void {
-    const base = getBaseUrl();
     const current = window.location.pathname + window.location.search;
-    const url = `${base}/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
+    const url = `https://api.canthus.org/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
     console.warn(url);
     const navigate = useNavigate();
     navigate({ href: url, reloadDocument: true });

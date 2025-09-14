@@ -1,13 +1,13 @@
 import type { Client } from "server/dist/src/client";
 import { hcWithType } from "server/dist/src/client";
-import { getApiBaseUrl, logger } from "@/lib/env/client-env";
+import { getServerUrl, logger } from "@/lib/env/client-env";
 
 export type JsonFrom<R extends PromiseLike<{ json(): Promise<unknown> }>> = Awaited<
     ReturnType<Awaited<R>["json"]>
 >;
 
-// Get validated API base URL
-const baseUrl = getApiBaseUrl();
+// Get validated server URL
+const baseUrl = getServerUrl();
 
 logger.info('API client initialized', {
     component: 'ApiClient',

@@ -5,8 +5,7 @@ import { logger } from '@/lib/logger';
 export { logger };
 
 export interface ClientEnv {
-    VITE_API_BASE_URL: string;
-    VITE_SERVER_URL?: string;
+    VITE_SERVER_URL: string;
     NODE_ENV?: string;
     VITE_ENV_NAME?: string;
 }
@@ -23,8 +22,7 @@ export function getClientEnv(): ClientEnv {
     });
 
     const clientEnv: ClientEnv = {
-        VITE_API_BASE_URL: env.VITE_API_BASE_URL as string || '',
-        VITE_SERVER_URL: env.VITE_SERVER_URL as string,
+        VITE_SERVER_URL: env.VITE_SERVER_URL as string || '',
         NODE_ENV: env.NODE_ENV as string,
         VITE_ENV_NAME: env.VITE_ENV_NAME as string,
     };
@@ -38,7 +36,6 @@ export function validateClientEnv(env?: ClientEnv): ClientEnv {
     // Log environment variables for debugging
     logger.debug('Client environment variables:', {
         component: 'ClientEnv',
-        hasApiBaseUrl: !!envVars.VITE_API_BASE_URL,
         hasServerUrl: !!envVars.VITE_SERVER_URL,
         nodeEnv: envVars.NODE_ENV,
         envName: envVars.VITE_ENV_NAME,
@@ -49,14 +46,14 @@ export function validateClientEnv(env?: ClientEnv): ClientEnv {
     if (envVars && Object.keys(envVars).length > 0) {
         const missingVars: string[] = [];
 
-        if (!envVars.VITE_API_BASE_URL) {
-            missingVars.push("VITE_API_BASE_URL");
+        if (!envVars.VITE_SERVER_URL) {
+            missingVars.push("VITE_SERVER_URL");
         } else {
             // Validate URL format
             try {
-                new URL(envVars.VITE_API_BASE_URL);
+                new URL(envVars.VITE_SERVER_URL);
             } catch (e) {
-                const errorMessage = `VITE_API_BASE_URL is not a valid URL: ${envVars.VITE_API_BASE_URL}`;
+                const errorMessage = `VITE_SERVER_URL is not a valid URL: ${envVars.VITE_SERVER_URL}`;
                 logger.error(errorMessage, { component: 'ClientEnv' });
                 throw new Error(errorMessage);
             }
@@ -71,7 +68,7 @@ export function validateClientEnv(env?: ClientEnv): ClientEnv {
         }
     } else {
         logger.warn('No client environment variables provided. Make sure to:');
-        logger.warn('1. Set VITE_API_BASE_URL in your environment');
+        logger.warn('1. Set VITE_SERVER_URL in your environment');
         logger.warn('2. For Cloudflare Pages, configure in wrangler.toml or dashboard');
         logger.warn('3. For local development, create .env files with VITE_ prefixes');
     }
@@ -79,12 +76,12 @@ export function validateClientEnv(env?: ClientEnv): ClientEnv {
     return envVars;
 }
 
-export function getApiBaseUrl(): string {
+export function getServerUrl(): string {
     try {
         const env = validateClientEnv();
-        return env.VITE_API_BASE_URL;
+        return env.VITE_SERVER_URL;
     } catch (error) {
-        logger.error('Failed to get API base URL', {
+        logger.error('Failed to get server URL', {
             component: 'ClientEnv',
             error: (error as Error).message
         });
@@ -95,7 +92,7 @@ export function getApiBaseUrl(): string {
             ? 'http://localhost:3000'
             : 'https://api.canthus.org';
 
-        logger.warn('Using fallback API URL', {
+        logger.warn('Using fallback server URL', {
             component: 'ClientEnv',
             fallbackUrl,
             isDevelopment
@@ -105,10 +102,6 @@ export function getApiBaseUrl(): string {
     }
 }
 
-export function getServerUrl(): string {
-    const env = getClientEnv();
-    return env.VITE_SERVER_URL || getApiBaseUrl();
-}
 
 export function isProduction(): boolean {
     const env = getClientEnv();
@@ -131,8 +124,7 @@ export function getEnvironmentConfig() {
         isDevelopment: isDev,
         environment: env.NODE_ENV || 'development',
         envName: env.VITE_ENV_NAME || 'local',
-        apiBaseUrl: env.VITE_API_BASE_URL,
-        serverUrl: env.VITE_SERVER_URL || env.VITE_API_BASE_URL,
+        serverUrl: env.VITE_SERVER_URL,
         logLevel: isProd ? 'info' : 'debug',
     };
 }
@@ -147,7 +139,7 @@ export function initializeClientEnv(): ClientEnv {
             logger.info('Client environment initialized successfully', {
                 component: 'ClientEnv',
                 environment: validatedEnv.NODE_ENV,
-                apiBaseUrl: validatedEnv.VITE_API_BASE_URL
+                serverUrl: validatedEnv.VITE_SERVER_URL
             });
         } catch (error) {
             logger.error('Client environment validation failed', {
@@ -157,7 +149,7 @@ export function initializeClientEnv(): ClientEnv {
 
             // Use fallback configuration
             validatedEnv = {
-                VITE_API_BASE_URL: getApiBaseUrl(),
+                VITE_SERVER_URL: getServerUrl(),
                 NODE_ENV: isDevelopment() ? 'development' : 'production'
             };
         }

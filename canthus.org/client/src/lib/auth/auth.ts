@@ -2,6 +2,7 @@ import { client } from "@/lib/api/client";
 import type { AuthMeResponse, User } from "shared/dist";
 import { deleteCookie } from "./storage";
 import { getServerUrl, logger } from "@/lib/env/client-env";
+import { clearAuthCache } from "./status";
 
 function getBaseUrl() {
     try {
@@ -65,8 +66,12 @@ export function logIn(): void {
 
 export function logOut(): void {
     try {
-        localStorage.removeItem('me:user');
-        deleteCookie('me:user');
+        clearAuthCache();
     } catch { }
+
+    logger.info('Redirecting to logout', {
+        component: 'Auth',
+        redirectTo: '/auth/logout'
+    });
     redirectTo("/auth/logout");
 }

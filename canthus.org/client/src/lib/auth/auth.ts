@@ -1,17 +1,14 @@
 import { client } from "@/lib/api/client";
-import { useNavigate } from "@tanstack/react-router";
-
 import type { AuthMeResponse, User } from "shared/dist";
 
 
 function getBaseUrl() {
-    (import.meta as any).env?.VITE_API_BASE_URL as string ?? "https://api.canthus.org"
+    (import.meta as any).env?.VITE_API_BASE_URL as string
 }
 
 function redirectTo(path: string) {
     const base = getBaseUrl();
-    const navigate = useNavigate();
-    navigate({ href: `${base}${path}`, reloadDocument: true });
+    window.location.href = `${base}${path}`;
 }
 
 export async function amILoggedIn(): Promise<boolean> {
@@ -41,8 +38,8 @@ export function logIn(): void {
     const current = window.location.pathname + window.location.search;
     const url = `https://api.canthus.org/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
     console.warn(url);
-    const navigate = useNavigate();
-    navigate({ href: url, reloadDocument: true });
+    // Use window.location for navigation instead of React Router hook
+    window.location.href = url;
 }
 
 export function logOut(): void {

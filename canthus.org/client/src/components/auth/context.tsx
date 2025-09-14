@@ -22,8 +22,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
             const res = await client.auth.me.$get();
             const json = await res.json() as AuthMeResponse;
-            console.log(JSON.stringify(json, null, 2));
             if (json.authenticated) {
+                console.log(JSON.stringify(json, null, 2));
                 const u = (json as Extract<AuthMeResponse, { authenticated: true }>).user;
                 setUser(u);
                 try { localStorage.setItem('me:user', JSON.stringify(u)); } catch { }

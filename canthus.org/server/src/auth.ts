@@ -113,6 +113,31 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                         endpoint: '/auth/callback',
                         userId: user?.id,
                     });
+
+                    // Store user data in cookies for client access
+                    setCookie(c, 'me:user', JSON.stringify(user), {
+                        ...cookieOptions,
+                        httpOnly: false, // Allow client-side access
+                        maxAge: 60 * 60 * 24 * 7, // 7 days
+                    });
+
+                    // Get and store organizations
+                    try {
+                        const orgs = await getOrganizations(user.id, workos);
+                        if (orgs.authenticated && orgs.organizations) {
+                            setCookie(c, 'me:organizations', JSON.stringify(orgs.organizations), {
+                                ...cookieOptions,
+                                httpOnly: false, // Allow client-side access
+                                maxAge: 60 * 60 * 24 * 7, // 7 days
+                            });
+                        }
+                    } catch (error) {
+                        logger.warn('Failed to fetch organizations', {
+                            endpoint: '/auth/callback',
+                            userId: user?.id,
+                            error: (error as Error).message
+                        });
+                    }
                 }
 
                 const redirectTo = getCookie(c, 'redirect_to');
@@ -129,7 +154,9 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                     redirectTo,
                 });
 
-                return c.redirect(`${authEnv.APP_BASE_URL}${`/auth/callback?redirect_to=${redirectTo}`}`);
+                // Redirect directly to the app - no need for client-side callback processing
+                const finalRedirect = redirectTo || '/app';
+                return c.redirect(`${authEnv.APP_BASE_URL}${finalRedirect}`);
             } catch (error) {
                 logger.workosAuthError(error as Error, {
                     endpoint: '/auth/callback',
@@ -137,16 +164,26 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                 return c.redirect('/login');
             }
         })
-        // Logout clears the sealed session cookie and redirects home
+        // Logout clears all auth cookies and redirects home
         .get('/logout', async (c) => {
             logger.authLogout(undefined, {
                 endpoint: '/auth/logout',
             });
 
             const cookieOptions = getCookieOptions(authEnv, secureCookie);
+
+            // Clear all authentication cookies
             deleteCookie(c, 'wos-session', cookieOptions);
+            deleteCookie(c, 'me:user', cookieOptions);
+            deleteCookie(c, 'me:organizations', cookieOptions);
 
             logger.cookieDelete('wos-session', {
+                endpoint: '/auth/logout',
+            });
+            logger.cookieDelete('me:user', {
+                endpoint: '/auth/logout',
+            });
+            logger.cookieDelete('me:organizations', {
                 endpoint: '/auth/logout',
             });
 
@@ -183,6 +220,19 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                 }
                 const user = result.user as User;
                 user.organizations = orgs.organizations;
+
+                // Update cookies with fresh data
+                const cookieOptions = getCookieOptions(authEnv, secureCookie);
+                setCookie(c, 'me:user', JSON.stringify(user), {
+                    ...cookieOptions,
+                    httpOnly: false,
+                    maxAge: 60 * 60 * 24 * 7, // 7 days
+                });
+                setCookie(c, 'me:organizations', JSON.stringify(orgs.organizations), {
+                    ...cookieOptions,
+                    httpOnly: false,
+                    maxAge: 60 * 60 * 24 * 7, // 7 days
+                });
 
                 return c.json({ authenticated: true, user: user }, 200);
             } catch (err) {
@@ -253,41 +303,67 @@ export async function withAuth(
     options: CreateAuthRoutesOptions,
     next: (c: Context) => Response | Promise<Response>,
 ) {
+    const logger = getLogger();
     const sessionData = getCookie(c, 'wos-session');
+
     if (!sessionData) {
+        logger.authFailure('No session cookie found', {
+            endpoint: c.req.path,
+            reason: 'no_session_cookie'
+        });
         return c.redirect('/login');
     }
+
     const workos = createWorkOSClient(options.authEnv.WORKOS_API_KEY, options.authEnv.WORKOS_CLIENT_ID);
     const session = workos.userManagement.loadSealedSession({
         sessionData: sessionData,
         cookiePassword: options.authEnv.WORKOS_COOKIE_PASSWORD,
     });
 
-    const authResult = await session.authenticate();
-    if (authResult.authenticated) {
-        return next(c);
-    }
-
-    // If the cookie is missing, redirect to login
-    if (!authResult.authenticated && authResult.reason === 'no_session_cookie_provided') {
-        return c.redirect('/login');
-    }
-
-    // If the session is invalid, attempt to refresh
     try {
-        const res = await session.refresh();
+        const authResult = await session.authenticate();
 
-        if (!res.authenticated || !res.sealedSession) {
+        if (authResult.authenticated) {
+            logger.info('Authentication successful', {
+                endpoint: c.req.path,
+                userId: authResult.user?.id
+            });
+            return next(c);
+        }
+
+        // If the session is invalid, attempt to refresh
+        logger.warn('Session invalid, attempting refresh', {
+            endpoint: c.req.path,
+            reason: authResult.reason
+        });
+
+        const refreshResult = await session.refresh();
+
+        if (!refreshResult.authenticated || !refreshResult.sealedSession) {
+            logger.authFailure('Token refresh failed', {
+                endpoint: c.req.path,
+                reason: 'refresh_failed'
+            });
             return c.redirect('/login');
         }
 
-        // update the cookie
+        // Update the cookie with refreshed session
         const cookieOptions = getCookieOptions(options.authEnv, options.secureCookie ?? true);
-        setCookie(c, 'wos-session', res.sealedSession, cookieOptions);
+        setCookie(c, 'wos-session', refreshResult.sealedSession, cookieOptions);
+
+        logger.info('Token refreshed successfully', {
+            endpoint: c.req.path,
+            userId: refreshResult.user?.id
+        });
 
         // Redirect to the same route to ensure the updated cookie is used
         return c.redirect(c.req.url);
-    } catch (e) {
+    } catch (error) {
+        logger.error('Authentication error', {
+            endpoint: c.req.path,
+            error: (error as Error).message
+        });
+
         // Failed to refresh access token, redirect user to login page
         // after deleting the cookie
         const deleteCookieOptions = getCookieOptions(options.authEnv, options.secureCookie ?? true);

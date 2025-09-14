@@ -1,0 +1,9 @@
+# Copy this file to .dev.vars and fill in your actual values
+# .dev.vars is used by Wrangler for local development
+
+WORKOS_API_KEY=sk_test_your_workos_api_key_here
+WORKOS_CLIENT_ID=client_your_workos_client_id_here
+WORKOS_REDIRECT_URI=https://your-domain.com/auth/callback
+WORKOS_COOKIE_PASSWORD=your_secure_cookie_password_here
+APP_BASE_URL=https://your-domain.com
+NODE_ENV=development

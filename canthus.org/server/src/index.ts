@@ -6,6 +6,21 @@ import type { ApiResponse } from "shared/dist";
 import { getAuthEnv } from "./types/auth/auth-env";
 
 export function createApp(env?: any) {
+	// Enhanced logging for environment variable debugging
+	if (env && Object.keys(env).length > 0) {
+		console.log('Environment variables received:', {
+			hasWorkosApiKey: !!env.WORKOS_API_KEY,
+			hasWorkosClientId: !!env.WORKOS_CLIENT_ID,
+			hasWorkosRedirectUri: !!env.WORKOS_REDIRECT_URI,
+			hasWorkosCookiePassword: !!env.WORKOS_COOKIE_PASSWORD,
+			hasAppBaseUrl: !!env.APP_BASE_URL,
+			nodeEnv: env.NODE_ENV,
+			totalKeys: Object.keys(env).length
+		});
+	} else {
+		console.warn('No environment variables provided to createApp');
+	}
+
 	const authEnv = getAuthEnv(env);
 	const isProduction = (env?.NODE_ENV || process.env.NODE_ENV) === 'production';
 

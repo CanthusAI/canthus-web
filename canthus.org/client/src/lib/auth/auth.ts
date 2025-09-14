@@ -1,5 +1,6 @@
 import { client } from "@/lib/api/client";
 import type { AuthMeResponse, User } from "shared/dist";
+import { deleteCookie } from "./storage";
 
 
 function getBaseUrl() {
@@ -36,15 +37,15 @@ export async function myProfile(): Promise<User | null> {
 
 export function logIn(): void {
     const current = window.location.pathname + window.location.search;
-    const url = `https://api.canthus.org/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
+    const url = `${getBaseUrl()}/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
     console.warn(url);
-    // Use window.location for navigation instead of React Router hook
     window.location.href = url;
 }
 
 export function logOut(): void {
     try {
         localStorage.removeItem('me:user');
+        deleteCookie('me:user');
     } catch { }
     redirectTo("/auth/logout");
 }

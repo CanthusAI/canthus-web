@@ -164,9 +164,61 @@ All logs follow a consistent JSON structure:
 
 ### Server Environment Variables
 
-- `NODE_ENV`: Controls log level and formatting
-  - `production`: Only info, warn, error logs
-  - `development`: All logs including debug
+#### For Local Development (Wrangler)
+
+Create a `.dev.vars` file in the `server/` directory:
+
+```bash
+# server/.dev.vars
+WORKOS_API_KEY=sk_test_your_workos_api_key_here
+WORKOS_CLIENT_ID=client_your_workos_client_id_here
+WORKOS_REDIRECT_URI=https://your-domain.com/auth/callback
+WORKOS_COOKIE_PASSWORD=your_secure_cookie_password_here
+APP_BASE_URL=https://your-domain.com
+NODE_ENV=development
+```
+
+#### For Production Deployment
+
+Set secrets using Wrangler CLI:
+
+```bash
+# Set secrets for production
+wrangler secret put WORKOS_API_KEY
+wrangler secret put WORKOS_CLIENT_ID
+wrangler secret put WORKOS_REDIRECT_URI
+wrangler secret put WORKOS_COOKIE_PASSWORD
+wrangler secret put APP_BASE_URL
+```
+
+#### Environment-Specific Deployment
+
+```bash
+# Staging environment
+wrangler secret put WORKOS_API_KEY --env staging
+wrangler secret put WORKOS_CLIENT_ID --env staging
+# ... other secrets
+
+# Deploy to staging
+bun run deploy:workers:staging
+```
+
+#### Quick Setup
+
+Run the setup script for guided environment configuration:
+
+```bash
+cd server
+./scripts/setup-env.sh
+```
+
+### Environment Variable Validation
+
+The application includes enhanced validation and debugging for environment variables:
+
+- **Missing variables**: Clear error messages with setup instructions
+- **Debug logging**: Shows which variables are available
+- **Development warnings**: Helpful tips for local development
 
 ### Client Environment Variables
 

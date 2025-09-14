@@ -7,10 +7,25 @@ compatibility_flags = ["nodejs_compat"]
 [observability]
 enabled = true
 
-# Environment variables - these will be set in Cloudflare dashboard or via wrangler
-# Uncomment and set these for production deployment
-# [vars]
-# NODE_ENV = "production"
+# Environment variables for different environments
+# For local development, create a .dev.vars file (see .dev.vars.example)
+# For production, set secrets via: wrangler secret put SECRET_NAME
+
+[vars]
+NODE_ENV = "production"
+
+# Environment-specific configurations
+[env.development]
+name = "canthus-api-dev"
+
+[env.development.vars]
+NODE_ENV = "development"
+
+[env.staging]
+name = "canthus-api-staging"
+
+[env.staging.vars]
+NODE_ENV = "staging"
 
 # Secrets should be set via: wrangler secret put SECRET_NAME
 # Required secrets:
@@ -22,13 +37,16 @@ enabled = true
 
 # Optional: Set up custom domain
 # For custom domains, use the following format:
-#[env.production]
-#route = "api.canthus.org/*"
+[env.production]
+route = "api.canthus.org/*"
 # 
 # Or for zone-based routing:
 # routes = [
 #   { pattern = "api.canthus.org/*", zone_name = "canthus.org" }
 # ]
+
+[env.production.vars]
+NODE_ENV = "production"
 
 # Optional: Configure KV storage if needed for sessions
 # [[kv_namespaces]]

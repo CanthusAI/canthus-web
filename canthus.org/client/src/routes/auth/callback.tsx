@@ -1,55 +1,43 @@
-import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
-import { useAuth } from '@/components/auth/context'
 import { logger } from '@/lib/logger'
-
+import { WaveLoader } from '@/components/ui/wave-loader'
 
 export const Route = createFileRoute('/auth/callback')({
     component: CallbackPage,
 })
 
 function CallbackPage() {
-    const { refresh } = useAuth()
     const navigate = useNavigate()
-    const search = useSearch({ from: '/auth/callback' }) as { redirect_to?: string }
 
     useEffect(() => {
         logger.componentMount('CallbackPage');
+        logger.info('Auth callback page loaded - should redirect from server', {
+            component: 'CallbackPage'
+        });
 
-        (async () => {
-
-            try {
-                logger.info('Processing auth callback', {
-                    component: 'CallbackPage',
-                    redirectTo: "/app"
-                });
-
-                await refresh()
-
-                const redirectPath = '/app';
-                logger.navigation(window.location.pathname, redirectPath, {
-                    component: 'CallbackPage',
-                    reason: 'auth_callback_complete'
-                });
-
-                navigate({ to: redirectPath, replace: true })
-            } catch (error) {
-                logger.error('Auth callback failed', {
-                    component: 'CallbackPage',
-                    error: (error as Error).message
-                });
-            }
-        })()
+        // Fallback redirect in case server redirect doesn't work
+        const fallbackTimer = setTimeout(() => {
+            logger.warn('Fallback redirect triggered', {
+                component: 'CallbackPage',
+                reason: 'server_redirect_timeout'
+            });
+            navigate({ to: '/app', replace: true });
+        }, 3000);
 
         return () => {
+            clearTimeout(fallbackTimer);
             logger.componentUnmount('CallbackPage');
         };
-    }, [refresh, navigate])
+    }, [navigate])
 
     return (
         <div className="flex items-center justify-center min-h-[60vh]">
-            {/* TODO: Make the below load in after a few seconds to reduce the flash of the spinner */}
-            {/* <WaveLoader bars={5} message="Signing you in…" /> */}
+            <div className="text-center">
+                <WaveLoader />
+                <h1 className="text-2xl font-bold mb-2">Signing you in...</h1>
+                <p className="text-muted-foreground">Please wait while we complete your authentication.</p>
+            </div>
         </div>
     )
 }

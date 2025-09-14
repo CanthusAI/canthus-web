@@ -56,6 +56,20 @@ describe("CORS configuration", () => {
         expect(res.headers.get("access-control-allow-origin")).toBe("https://canthus-org.pages.dev");
     });
 
+    it("allows credentials for custom domain", async () => {
+        const { app } = await import("../src/index");
+        const res = await app.request("http://localhost/hello", {
+            method: "OPTIONS",
+            headers: {
+                Origin: "https://canthus.org",
+                "Access-Control-Request-Method": "GET",
+                "Access-Control-Request-Headers": "Content-Type",
+            },
+        });
+        expect(res.headers.get("access-control-allow-credentials")).toBe("true");
+        expect(res.headers.get("access-control-allow-origin")).toBe("https://canthus.org");
+    });
+
     it("allows credentials for localhost development", async () => {
         const { app } = await import("../src/index");
         const res = await app.request("http://localhost/hello", {

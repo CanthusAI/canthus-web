@@ -11,7 +11,7 @@
     "start:prod": "bun --env-file=.env.production run dist/index.js",
     "test": "bun test",
     "dev:workers": "wrangler dev",
-    "deploy:workers": "wrangler deploy",
+    "deploy:workers": "bun run build && wrangler deploy",
     "build:workers": "tsc && wrangler deploy --dry-run"
   },
   "dependencies": {

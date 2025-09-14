@@ -39,6 +39,7 @@ export function logIn(): void {
     const base = getBaseUrl();
     const current = window.location.pathname + window.location.search;
     const url = `${base}/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
+    console.log(url);
     window.location.href = url;
 }
 

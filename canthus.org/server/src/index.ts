@@ -22,10 +22,9 @@ export function createApp(env?: any) {
 			}
 		}
 
-		// Add production Pages domain
 		origins.push('https://canthus-org.pages.dev');
+		origins.push('https://canthus.org');
 
-		// Add localhost for development
 		origins.push('http://localhost:5173');
 		origins.push('http://localhost:3000');
 

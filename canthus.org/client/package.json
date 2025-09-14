@@ -14,7 +14,10 @@
     "favicons": "bun scripts/generate-favicons.ts",
     "deploy:pages": "wrangler pages deploy dist --env=preview",
     "deploy:pages:prod": "bun run build:prod && wrangler pages deploy dist --project-name=canthus-org",
-    "pages:dev": "wrangler pages dev dist"
+    "deploy:pages:staging": "bun run build:staging && wrangler pages deploy dist --env=staging",
+    "pages:dev": "wrangler pages dev dist",
+    "setup:env": "./scripts/setup-env.sh",
+    "validate:env": "node -e \"console.log('Environment validation will run on app startup')\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

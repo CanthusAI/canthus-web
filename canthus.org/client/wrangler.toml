@@ -10,6 +10,19 @@ enabled = true
 
 # Environment variables for build
 [env.production.vars]
-VITE_SERVER_URL = "https://canthus.org"
 VITE_API_BASE_URL = "https://api.canthus.org"
+VITE_SERVER_URL = "https://api.canthus.org"
 NODE_ENV = "production"
+VITE_ENV_NAME = "production"
+
+[env.staging.vars]
+VITE_API_BASE_URL = "https://staging-api.canthus.org"
+VITE_SERVER_URL = "https://staging-api.canthus.org"
+NODE_ENV = "staging"
+VITE_ENV_NAME = "staging"
+
+[env.development.vars]
+VITE_API_BASE_URL = "http://localhost:3000"
+VITE_SERVER_URL = "http://localhost:3000"
+NODE_ENV = "development"
+VITE_ENV_NAME = "development"

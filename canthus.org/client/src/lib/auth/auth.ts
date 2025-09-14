@@ -1,10 +1,24 @@
 import { client } from "@/lib/api/client";
 import type { AuthMeResponse, User } from "shared/dist";
 import { deleteCookie } from "./storage";
-
+import { getServerUrl, logger } from "@/lib/env/client-env";
 
 function getBaseUrl() {
-    (import.meta as any).env?.VITE_API_BASE_URL as string
+    try {
+        const serverUrl = getServerUrl();
+        logger.debug('Using server URL for auth redirects', {
+            component: 'Auth',
+            serverUrl
+        });
+        return serverUrl;
+    } catch (error) {
+        logger.error('Failed to get server URL, using fallback', {
+            component: 'Auth',
+            error: (error as Error).message
+        });
+        // Fallback for development
+        return import.meta.env.DEV ? 'http://localhost:3000' : 'https://api.canthus.org';
+    }
 }
 
 function redirectTo(path: string) {
@@ -37,8 +51,15 @@ export async function myProfile(): Promise<User | null> {
 
 export function logIn(): void {
     const current = window.location.pathname + window.location.search;
-    const url = `${getBaseUrl()}/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
-    console.warn(url);
+    const baseUrl = getBaseUrl();
+    const url = `${baseUrl}/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
+
+    logger.info('Redirecting to login', {
+        component: 'Auth',
+        url,
+        redirectTo: current
+    });
+
     window.location.href = url;
 }
 

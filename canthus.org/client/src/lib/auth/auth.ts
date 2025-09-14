@@ -5,7 +5,7 @@ import type { AuthMeResponse, User } from "shared/dist";
 
 
 function getBaseUrl() {
-    return (import.meta as any).env?.VITE_API_BASE_URL as string
+    (import.meta as any).env?.API_BASE_URL as string ?? "https://api.canthus.org"
 }
 
 function redirectTo(path: string) {

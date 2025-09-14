@@ -12,9 +12,8 @@
     "build:prod": "tsc -b && vite build --mode=production",
     "preview": "vite preview",
     "favicons": "bun scripts/generate-favicons.ts",
-    "deploy:pages": "wrangler pages deploy dist",
-    "deploy:pages:staging": "wrangler pages deploy dist --env=staging",
-    "deploy:pages:prod": "wrangler pages deploy dist --env=production",
+    "deploy:pages": "wrangler pages deploy dist --env=preview",
+    "deploy:pages:prod": "bun run build:prod && wrangler pages deploy dist --project-name=canthus-org",
     "pages:dev": "wrangler pages dev dist"
   },
   "dependencies": {

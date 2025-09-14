@@ -9,18 +9,32 @@ export function createApp(env?: any) {
 	const authEnv = getAuthEnv(env);
 	const isProduction = (env?.NODE_ENV || process.env.NODE_ENV) === 'production';
 
-	// Ensure CORS allows credentials and the specific client origin
-	const allowedOrigin = (() => {
-		try {
-			return new URL(authEnv.APP_BASE_URL).origin;
-		} catch {
-			return authEnv.APP_BASE_URL;
+	// Ensure CORS allows credentials and the specific client origins
+	const allowedOrigins = (() => {
+		const origins = [];
+
+		// Add the configured APP_BASE_URL origin
+		if (authEnv.APP_BASE_URL) {
+			try {
+				origins.push(new URL(authEnv.APP_BASE_URL).origin);
+			} catch {
+				origins.push(authEnv.APP_BASE_URL);
+			}
 		}
+
+		// Add production Pages domain
+		origins.push('https://canthus-org.pages.dev');
+
+		// Add localhost for development
+		origins.push('http://localhost:5173');
+		origins.push('http://localhost:3000');
+
+		return origins;
 	})();
 
 	const app = new Hono()
 		.use(cors({
-			origin: allowedOrigin,
+			origin: allowedOrigins,
 			credentials: true,
 			allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 			allowHeaders: ["Content-Type", "Authorization"],

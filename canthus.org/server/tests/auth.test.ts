@@ -5,6 +5,7 @@ beforeAll(() => {
     process.env.WORKOS_CLIENT_ID = "test_client";
     process.env.WORKOS_COOKIE_PASSWORD = "test_cookie_password_please_change";
     process.env.WORKOS_REDIRECT_URI = "http://localhost:3000/auth/callback";
+    process.env.APP_BASE_URL = "http://localhost:5173";
 });
 
 afterEach(() => {

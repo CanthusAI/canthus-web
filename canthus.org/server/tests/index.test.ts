@@ -41,6 +41,34 @@ describe("CORS configuration", () => {
         expect(res.headers.get("access-control-allow-credentials")).toBe("true");
         expect(res.headers.get("access-control-allow-origin")).toBe(process.env.APP_BASE_URL!);
     });
+
+    it("allows credentials for production Pages domain", async () => {
+        const { app } = await import("../src/index");
+        const res = await app.request("http://localhost/hello", {
+            method: "OPTIONS",
+            headers: {
+                Origin: "https://canthus-org.pages.dev",
+                "Access-Control-Request-Method": "GET",
+                "Access-Control-Request-Headers": "Content-Type",
+            },
+        });
+        expect(res.headers.get("access-control-allow-credentials")).toBe("true");
+        expect(res.headers.get("access-control-allow-origin")).toBe("https://canthus-org.pages.dev");
+    });
+
+    it("allows credentials for localhost development", async () => {
+        const { app } = await import("../src/index");
+        const res = await app.request("http://localhost/hello", {
+            method: "OPTIONS",
+            headers: {
+                Origin: "http://localhost:5173",
+                "Access-Control-Request-Method": "GET",
+                "Access-Control-Request-Headers": "Content-Type",
+            },
+        });
+        expect(res.headers.get("access-control-allow-credentials")).toBe("true");
+        expect(res.headers.get("access-control-allow-origin")).toBe("http://localhost:5173");
+    });
 });
 
 describe("Auth /me", () => {

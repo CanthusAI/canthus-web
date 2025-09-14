@@ -1,4 +1,5 @@
 import { client } from "@/lib/api/client";
+import { useNavigate } from "@tanstack/react-router";
 
 import type { AuthMeResponse, User } from "shared/dist";
 
@@ -39,8 +40,9 @@ export function logIn(): void {
     const base = getBaseUrl();
     const current = window.location.pathname + window.location.search;
     const url = `${base}/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
-    console.log(url);
-    window.location.href = url;
+    console.warn(url);
+    const navigate = useNavigate();
+    navigate({ href: url, reloadDocument: true });
 }
 
 export function logOut(): void {

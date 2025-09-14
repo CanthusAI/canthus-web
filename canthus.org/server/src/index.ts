@@ -25,8 +25,7 @@ export function createApp(env?: any) {
 		origins.push('https://canthus-org.pages.dev');
 		origins.push('https://canthus.org');
 
-		origins.push('http://localhost:5173');
-		origins.push('http://localhost:3000');
+		origins.push('http://localhost:*');
 
 		return origins;
 	})();

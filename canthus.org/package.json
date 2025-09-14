@@ -18,6 +18,7 @@
     "build": "turbo build",
     "build:client": "turbo build --filter=client",
     "build:server": "turbo build --filter=server",
+    "deploy": "python3 scripts/deploy.py",
     "lint": "biome lint .",
     "type-check": "turbo type-check",
     "test": "turbo test",

@@ -130,6 +130,13 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                                 httpOnly: false, // Allow client-side access
                                 maxAge: 60 * 60 * 24 * 7, // 7 days
                             });
+
+                            // Store user + orgs in cookies for client access
+                            setCookie(c, 'me:user', JSON.stringify({ ...user, organizations: orgs.organizations }), {
+                                ...cookieOptions,
+                                httpOnly: false, // Allow client-side access
+                                maxAge: 60 * 60 * 24 * 7, // 7 days
+                            });
                         }
                     } catch (error) {
                         logger.warn('Failed to fetch organizations', {

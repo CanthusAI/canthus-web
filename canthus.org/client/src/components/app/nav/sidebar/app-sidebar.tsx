@@ -212,9 +212,9 @@ const sidebarItems: SidebarItem[] = [
 
 export function AppSidebar() {
     const { user, logOut } = useAuth();
-    // TODO test a user with an org attached, and use that in the team switcher
-    // this is a placeholder to disable the org/team switcher for now
-    // Removed team switcher
+    console.log(JSON.stringify(user, null, 2));
+
+
 
 
     const [activeItem, setActiveItem] = useState<string | null>("overview");

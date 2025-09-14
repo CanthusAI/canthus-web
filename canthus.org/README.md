@@ -105,7 +105,33 @@ bun run test
 
 ### Deployment
 
-Deplying each piece is very versatile and can be done numerous ways, and exploration into automating these will happen at a later date. Here are some references in the meantime.
+This project includes a comprehensive Python deployment script that automates deployment to Cloudflare Workers and Pages.
+
+#### Automated Deployment
+
+Use the deployment script for streamlined deployments:
+
+```bash
+# Deploy to production
+python3 scripts/deploy.py
+
+# Deploy to staging
+python3 scripts/deploy.py --environment=staging
+
+# Dry run (test without deploying)
+python3 scripts/deploy.py --dry-run
+```
+
+The deployment script includes:
+- Environment variable validation
+- Build verification and testing
+- Production state management
+- Comprehensive error handling and logging
+- Support for both production and staging environments
+
+For detailed deployment documentation, see [scripts/README.md](scripts/README.md).
+
+#### Manual Deployment
 
 **Client**
 - [Cloudflare Pages](https://vite.dev/guide/static-deploy.html#cloudflare-pages)

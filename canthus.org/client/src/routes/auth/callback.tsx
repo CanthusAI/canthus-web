@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useAuth } from '@/components/auth/context'
 import { logger } from '@/lib/logger'
 
+
 export const Route = createFileRoute('/auth/callback')({
     component: CallbackPage,
 })
@@ -46,11 +47,8 @@ function CallbackPage() {
 
     return (
         <div className="flex items-center justify-center min-h-[60vh]">
-
             {/* TODO: Make the below load in after a few seconds to reduce the flash of the spinner */}
             {/* <WaveLoader bars={5} message="Signing you in…" /> */}
         </div>
     )
 }
-
-

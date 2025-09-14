@@ -12,6 +12,31 @@ export type CreateAuthRoutesOptions = {
     secureCookie?: boolean;
 };
 
+function getCookieOptions(authEnv: AuthEnv, secureCookie: boolean): any {
+    const cookieOptions: any = {
+        path: '/',
+        httpOnly: true,
+        secure: secureCookie,
+        sameSite: 'Lax',
+    };
+
+    // For production, set domain to allow cross-subdomain access
+    if (secureCookie) {
+        try {
+            const appUrl = new URL(authEnv.APP_BASE_URL);
+            const domain = appUrl.hostname;
+            // Only set domain for production domains (not localhost)
+            if (!domain.includes('localhost') && !domain.includes('127.0.0.1')) {
+                cookieOptions.domain = domain.startsWith('.') ? domain : `.${domain}`;
+            }
+        } catch (e) {
+            console.warn('Could not parse APP_BASE_URL for cookie domain:', e);
+        }
+    }
+
+    return cookieOptions;
+}
+
 export function createAuthRoutes(options: CreateAuthRoutesOptions) {
     const { secureCookie = true, authEnv } = options;
     const workos = createWorkOSClient(authEnv.WORKOS_API_KEY, authEnv.WORKOS_CLIENT_ID);
@@ -82,15 +107,9 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                 });
 
                 if (sealedSession) {
-                    setCookie(c, 'wos-session', sealedSession, {
-                        path: '/',
-                        httpOnly: true,
-                        // For cross-site XHRs from the client origin to include cookies,
-                        // the cookie must be SameSite=None. In production, it must also be Secure.
-                        secure: secureCookie,
-                        sameSite: 'None',
-                    });
-                    logger.cookieSet('wos-session', { secure: secureCookie, sameSite: 'None' }, {
+                    const cookieOptions = getCookieOptions(authEnv, secureCookie);
+                    setCookie(c, 'wos-session', sealedSession, cookieOptions);
+                    logger.cookieSet('wos-session', { cookieOptions }, {
                         endpoint: '/auth/callback',
                         userId: user?.id,
                     });
@@ -124,12 +143,8 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                 endpoint: '/auth/logout',
             });
 
-            deleteCookie(c, 'wos-session', {
-                path: '/',
-                httpOnly: true,
-                secure: secureCookie,
-                sameSite: 'Lax',
-            });
+            const cookieOptions = getCookieOptions(authEnv, secureCookie);
+            deleteCookie(c, 'wos-session', cookieOptions);
 
             logger.cookieDelete('wos-session', {
                 endpoint: '/auth/logout',
@@ -267,19 +282,16 @@ export async function withAuth(
         }
 
         // update the cookie
-        setCookie(c, 'wos-session', res.sealedSession, {
-            path: '/',
-            httpOnly: true,
-            secure: options.secureCookie,
-            sameSite: 'None',
-        });
+        const cookieOptions = getCookieOptions(options.authEnv, options.secureCookie ?? true);
+        setCookie(c, 'wos-session', res.sealedSession, cookieOptions);
 
         // Redirect to the same route to ensure the updated cookie is used
         return c.redirect(c.req.url);
     } catch (e) {
         // Failed to refresh access token, redirect user to login page
         // after deleting the cookie
-        deleteCookie(c, 'wos-session');
+        const deleteCookieOptions = getCookieOptions(options.authEnv, options.secureCookie ?? true);
+        deleteCookie(c, 'wos-session', deleteCookieOptions);
         return c.redirect('/login');
     }
 }

@@ -17,15 +17,16 @@ function CallbackPage() {
         logger.componentMount('CallbackPage');
 
         (async () => {
+
             try {
                 logger.info('Processing auth callback', {
                     component: 'CallbackPage',
-                    redirectTo: search?.redirect_to
+                    redirectTo: "/app"
                 });
 
                 await refresh()
 
-                const redirectPath = search?.redirect_to ?? '/app';
+                const redirectPath = '/app';
                 logger.navigation(window.location.pathname, redirectPath, {
                     component: 'CallbackPage',
                     reason: 'auth_callback_complete'
@@ -43,7 +44,7 @@ function CallbackPage() {
         return () => {
             logger.componentUnmount('CallbackPage');
         };
-    }, [refresh, navigate, search])
+    }, [refresh, navigate])
 
     return (
         <div className="flex items-center justify-center min-h-[60vh]">

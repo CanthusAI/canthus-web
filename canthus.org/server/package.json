@@ -12,7 +12,11 @@
     "test": "bun test",
     "dev:workers": "wrangler dev",
     "deploy:workers": "bun run build && wrangler deploy",
-    "build:workers": "tsc && wrangler deploy --dry-run"
+    "build:workers": "tsc && wrangler deploy --dry-run",
+    "logs:tail": "wrangler tail",
+    "logs:tail:follow": "wrangler tail --format=pretty",
+    "logs:download": "wrangler tail --download",
+    "logs:debug": "wrangler dev --local --inspect"
   },
   "dependencies": {
     "@workos-inc/node": "^7.69.2",

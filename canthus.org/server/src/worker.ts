@@ -1,4 +1,5 @@
 import { createApp } from './index';
+import { createLogger, createRequestContext } from './logger';
 
 // Define the environment interface for Cloudflare Workers
 export interface Env {
@@ -18,14 +19,32 @@ export interface Env {
 
 export default {
     async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
+        const startTime = Date.now();
+        const isProduction = env.NODE_ENV === 'production';
+        const logger = createLogger(isProduction);
+
+        // Create request context for logging
+        const requestContext = createRequestContext(request, env);
+
         try {
+            logger.requestStart(request.method, request.url, requestContext);
+
             // Create the Hono app with environment variables
             const app = createApp(env);
 
             // Handle the request
-            return await app.fetch(request);
+            const response = await app.fetch(request);
+
+            const duration = Date.now() - startTime;
+            logger.requestEnd(request.method, request.url, response.status, duration, requestContext);
+
+            return response;
         } catch (error) {
-            console.error('Worker error:', error);
+            const duration = Date.now() - startTime;
+            logger.requestError(request.method, request.url, error as Error, {
+                ...requestContext,
+                duration,
+            });
 
             // Return a proper error response
             return new Response(

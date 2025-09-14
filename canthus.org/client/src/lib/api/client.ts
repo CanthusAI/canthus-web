@@ -5,7 +5,7 @@ export type JsonFrom<R extends PromiseLike<{ json(): Promise<unknown> }>> = Awai
     ReturnType<Awaited<R>["json"]>
 >;
 
-const baseUrl = (import.meta.env.VITE_SERVER_URL as string) || "http://localhost:3000";
+const baseUrl = (import.meta.env.VITE_SERVER_URL as string) || "https://api.canthus.org";
 
 export const client: Client = hcWithType(baseUrl, {
     fetch: (input: RequestInfo | URL, init?: RequestInit) =>

@@ -1,6 +1,7 @@
 import { Hono, type Context } from "hono";
 import { setCookie, getCookie, deleteCookie } from "hono/cookie";
 import { createWorkOSClient } from "./workos";
+import { getLogger } from "./logger";
 import type { AuthEnv } from "./types/auth/auth-env";
 import type { RefreshSessionResponse } from "@workos-inc/node";
 import type { Organization, OrganizationsResponse, User } from "shared/dist";
@@ -14,17 +15,26 @@ export type CreateAuthRoutesOptions = {
 export function createAuthRoutes(options: CreateAuthRoutesOptions) {
     const { secureCookie = true, authEnv } = options;
     const workos = createWorkOSClient(authEnv.WORKOS_API_KEY, authEnv.WORKOS_CLIENT_ID);
+    const logger = getLogger();
 
     const router = new Hono()
         // Login initiates the AuthKit flow
         .get('/login', async (c) => {
             const redirectTo = c.req.query('redirect_to');
+            logger.authAttempt(undefined, {
+                endpoint: '/auth/login',
+                redirectTo,
+            });
+
             if (redirectTo) {
                 setCookie(c, 'redirect_to', redirectTo, {
                     path: '/',
                     httpOnly: true,
                     secure: secureCookie,
                     sameSite: 'None',
+                });
+                logger.cookieSet('redirect_to', { redirectTo }, {
+                    endpoint: '/auth/login',
                 });
             }
 
@@ -33,12 +43,25 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                 redirectUri: authEnv.WORKOS_REDIRECT_URI,
                 clientId: authEnv.WORKOS_CLIENT_ID,
             });
+
+            logger.info('Redirecting to WorkOS authorization', {
+                endpoint: '/auth/login',
+                authorizationUrl,
+            });
+
             return c.redirect(authorizationUrl);
         })
         // Callback completes the flow and stores sealed session in a cookie
         .get('/callback', async (c) => {
             const code = c.req.query('code');
+            logger.workosCallback(code || '', {
+                endpoint: '/auth/callback',
+            });
+
             if (!code) {
+                logger.authFailure('No authorization code provided', {
+                    endpoint: '/auth/callback',
+                });
                 return c.json({ error: 'No code provided' }, 400);
             }
 
@@ -53,7 +76,10 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                 });
 
                 const { user, sealedSession } = authenticateResponse;
-                console.log(JSON.stringify(user, null, 2));
+                logger.workosAuthSuccess(user, {
+                    endpoint: '/auth/callback',
+                    userId: user?.id,
+                });
 
                 if (sealedSession) {
                     setCookie(c, 'wos-session', sealedSession, {
@@ -64,32 +90,65 @@ export function createAuthRoutes(options: CreateAuthRoutesOptions) {
                         secure: secureCookie,
                         sameSite: 'None',
                     });
+                    logger.cookieSet('wos-session', { secure: secureCookie, sameSite: 'None' }, {
+                        endpoint: '/auth/callback',
+                        userId: user?.id,
+                    });
                 }
 
                 const redirectTo = getCookie(c, 'redirect_to');
                 if (redirectTo) {
                     deleteCookie(c, 'redirect_to', { path: '/' });
+                    logger.cookieDelete('redirect_to', {
+                        endpoint: '/auth/callback',
+                        userId: user?.id,
+                    });
                 }
+
+                logger.authSuccess(user.id, {
+                    endpoint: '/auth/callback',
+                    redirectTo,
+                });
+
                 return c.redirect(`${authEnv.APP_BASE_URL}${`/auth/callback?redirect_to=${redirectTo}`}`);
             } catch (error) {
+                logger.workosAuthError(error as Error, {
+                    endpoint: '/auth/callback',
+                });
                 return c.redirect('/login');
             }
         })
         // Logout clears the sealed session cookie and redirects home
         .get('/logout', async (c) => {
+            logger.authLogout(undefined, {
+                endpoint: '/auth/logout',
+            });
+
             deleteCookie(c, 'wos-session', {
                 path: '/',
                 httpOnly: true,
                 secure: secureCookie,
                 sameSite: 'Lax',
             });
+
+            logger.cookieDelete('wos-session', {
+                endpoint: '/auth/logout',
+            });
+
             return c.redirect(`${authEnv.APP_BASE_URL}/`);
         })
         // Returns the current authenticated user using the sealed session cookie.
         // Augments the user with their first organization (if any).
         .get('/me', async (c) => {
             const sealed = getCookie(c, 'wos-session');
+            logger.cookieGet('wos-session', !!sealed, {
+                endpoint: '/auth/me',
+            });
+
             if (!sealed) {
+                logger.authFailure('No session cookie found', {
+                    endpoint: '/auth/me',
+                });
                 return c.json({ authenticated: false }, 401);
             }
 

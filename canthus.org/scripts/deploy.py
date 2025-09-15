@@ -232,8 +232,12 @@ class DeployScript:
 
     def save_deployment_log(self) -> None:
         """Save deployment log to file."""
+        # Create logs directory if it doesn't exist
+        logs_dir = self.project_root / "logs"
+        logs_dir.mkdir(exist_ok=True)
+        
         log_file = (
-            self.project_root
+            logs_dir
             / f"deployment-{self.environment}-{datetime.now().strftime('%Y%m%d-%H%M%S')}.log"
         )
 

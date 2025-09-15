@@ -17,6 +17,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { getVersionInfo } from "@/lib/version";
 
 export function TeamSwitcher({
   teams,
@@ -30,6 +32,7 @@ export function TeamSwitcher({
 }) {
   const { isMobile } = useSidebar();
   const [activeTeam] = React.useState(teams[0]);
+  const versionInfo = getVersionInfo();
 
   if (!activeTeam) {
     return null;
@@ -45,7 +48,22 @@ export function TeamSwitcher({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="bg-sidebar-accent text-sidebar-accent-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <Avatar><AvatarImage src={activeTeam.logoUrl} /> <AvatarFallback>{activeTeam.name.charAt(0)}</AvatarFallback></Avatar>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Avatar><AvatarImage src={activeTeam.logoUrl} /> <AvatarFallback>{activeTeam.name.charAt(0)}</AvatarFallback></Avatar>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <div className="text-center">
+                      <div className="font-semibold">Canthus v{versionInfo.version}</div>
+                      <div className="text-xs opacity-80">{versionInfo.environment}</div>
+                      {versionInfo.buildTime && (
+                        <div className="text-xs opacity-60">
+                          Built: {new Date(versionInfo.buildTime).toLocaleDateString()}
+                        </div>
+                      )}
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{activeTeam.name}</span>

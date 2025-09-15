@@ -46,6 +46,7 @@ export function createApp(env?: any) {
 	})();
 
 	const app = new Hono()
+		.basePath("/api")
 		.use(cors({
 			origin: allowedOrigins,
 			credentials: true,
@@ -84,8 +85,5 @@ export function createApp(env?: any) {
 	return app;
 }
 
-// For Cloudflare Workers, use createApp(env) with environment variables
-// For Node.js/Bun development, create app with process.env
-export const app = typeof process !== 'undefined' && process.env ? createApp() : createApp({});
-export default app;
+export const app = createApp();
 export type AppType = ReturnType<typeof createApp>;

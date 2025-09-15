@@ -3,6 +3,7 @@
 
 ## Libraries to use
 
+- https://reactbits.dev/
 - https://motion-primitives.com
 - https://21st.dev/home
 - https://animate-ui.com/

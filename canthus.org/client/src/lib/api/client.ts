@@ -1,5 +1,5 @@
-import type { Client } from "server/dist/src/client";
-import { hcWithType } from "server/dist/src/client";
+import type { Client } from "server/dist/client";
+import { hcWithType } from "server/dist/client";
 import { getServerUrl, logger } from "@/lib/env/client-env";
 
 export type JsonFrom<R extends PromiseLike<{ json(): Promise<unknown> }>> = Awaited<

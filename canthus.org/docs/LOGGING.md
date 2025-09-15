@@ -224,7 +224,7 @@ The application includes enhanced validation and debugging for environment varia
 
 #### Required Variables
 
-- `VITE_SERVER_URL`: Your server URL (required)
+- `SERVER_URL`: Your server URL (required)
 - `NODE_ENV`: Environment (development/staging/production)
 - `VITE_ENV_NAME`: Environment name for identification
 
@@ -233,7 +233,7 @@ The application includes enhanced validation and debugging for environment varia
 **For Local Development:**
 Create a `.env.local` file:
 ```bash
-VITE_SERVER_URL=http://localhost:3000
+SERVER_URL=http://localhost:3000
 NODE_ENV=development
 VITE_ENV_NAME=local
 ```
@@ -242,7 +242,7 @@ VITE_ENV_NAME=local
 Configure in `wrangler.toml`:
 ```toml
 [env.production.vars]
-VITE_SERVER_URL = "https://api.canthus.org"
+SERVER_URL = "https://api.canthus.org"
 NODE_ENV = "production"
 VITE_ENV_NAME = "production"
 ```

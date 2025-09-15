@@ -10,11 +10,11 @@ enabled = true
 
 # Environment variables for build
 [env.production.vars]
-VITE_SERVER_URL = "https://api.canthus.org"
+SERVER_URL = "https://api.canthus.org"
 NODE_ENV = "production"
 VITE_ENV_NAME = "production"
 
 [env.preview.vars]
-VITE_SERVER_URL = "https://staging-api.canthus.org"
+SERVER_URL = "https://staging-api.canthus.org"
 NODE_ENV = "staging"
 VITE_ENV_NAME = "staging"

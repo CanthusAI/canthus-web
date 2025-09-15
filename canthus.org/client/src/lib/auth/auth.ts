@@ -52,7 +52,7 @@ export async function myProfile(): Promise<User | null> {
 export function logIn(): void {
     const current = window.location.pathname + window.location.search;
     const baseUrl = getBaseUrl();
-    const url = `${baseUrl}/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
+    const url = `${baseUrl}/api/auth/login?redirect_to=${encodeURIComponent(!current.includes("/app") ? "/app" : current)}`;
 
     logger.info('Redirecting to login', {
         component: 'Auth',

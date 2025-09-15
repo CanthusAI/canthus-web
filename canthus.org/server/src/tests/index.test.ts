@@ -10,7 +10,7 @@ beforeAll(() => {
 
 describe("GET /hello", () => {
     it("sets greeted cookie on first visit", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/hello");
         expect(res.status).toBe(200);
         const setCookie = res.headers.get("set-cookie");
@@ -21,7 +21,7 @@ describe("GET /hello", () => {
 
 describe("GET /auth/callback", () => {
     it("returns 400 when no code provided", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/callback");
         expect(res.status).toBe(400);
     });
@@ -29,7 +29,7 @@ describe("GET /auth/callback", () => {
 
 describe("CORS configuration", () => {
     it("allows credentials for configured origin", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/hello", {
             method: "OPTIONS",
             headers: {
@@ -43,7 +43,7 @@ describe("CORS configuration", () => {
     });
 
     it("allows credentials for production Pages domain", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/hello", {
             method: "OPTIONS",
             headers: {
@@ -57,7 +57,7 @@ describe("CORS configuration", () => {
     });
 
     it("allows credentials for custom domain", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/hello", {
             method: "OPTIONS",
             headers: {
@@ -71,7 +71,7 @@ describe("CORS configuration", () => {
     });
 
     it("allows credentials for localhost development", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/hello", {
             method: "OPTIONS",
             headers: {
@@ -87,7 +87,7 @@ describe("CORS configuration", () => {
 
 describe("Auth /me", () => {
     it("returns unauthenticated without session cookie", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/me");
         expect(res.status).toBe(401);
         const json = await res.json();
@@ -97,7 +97,7 @@ describe("Auth /me", () => {
 
 describe("Auth login/logout redirects", () => {
     it("/auth/login sets redirect_to cookie when provided", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/login?redirect_to=%2Fapp%3Fq%3D1");
         const setCookie = res.headers.get("set-cookie");
         expect(setCookie).toBeTruthy();
@@ -105,7 +105,7 @@ describe("Auth login/logout redirects", () => {
     });
 
     it("/auth/logout clears session and redirects home", async () => {
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/logout");
         expect(res.status).toBe(302);
         const loc = res.headers.get("location");

@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeAll, afterEach, mock } from "bun:test";
+import type { AuthMeResponse, Organization, OrganizationsResponse } from "shared/dist";
 
 beforeAll(() => {
     process.env.WORKOS_API_KEY = "test_key";
@@ -10,13 +11,13 @@ beforeAll(() => {
 
 afterEach(() => {
     // Reset module cache between tests to ensure mocks don't leak
-    const indexPath = require.resolve("../src/index");
+    const indexPath = require.resolve("../index");
     delete require.cache[indexPath];
 });
 
 function mockWorkOS(success: boolean) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const workosModule = require("../src/workos");
+    const workosModule = require("../workos");
 
     const mockGetAuthorizationUrl = mock(() => "https://auth.example/authorize");
 
@@ -59,7 +60,7 @@ function mockWorkOS(success: boolean) {
 describe("auth routes", () => {
     it("/auth/login redirects to provider authorization URL", async () => {
         mockWorkOS(true);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/login");
         expect(res.status).toBe(302);
         const location = res.headers.get("location");
@@ -68,14 +69,14 @@ describe("auth routes", () => {
 
     it("/auth/callback 400s when no code provided", async () => {
         mockWorkOS(true);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/callback");
         expect(res.status).toBe(400);
     });
 
     it("/auth/callback sets cookie and redirects on success", async () => {
         mockWorkOS(true);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/callback?code=abc123");
         expect(res.status).toBe(302);
         const setCookie = res.headers.get("set-cookie");
@@ -86,7 +87,7 @@ describe("auth routes", () => {
 
     it("/auth/callback redirects to /auth/login on error", async () => {
         mockWorkOS(false);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/callback?code=bad");
         expect(res.status).toBe(302);
         expect(res.headers.get("location")).toBe("/login");
@@ -94,50 +95,54 @@ describe("auth routes", () => {
 
     it("/auth/me 401s when no session cookie present", async () => {
         mockWorkOS(true);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/me");
         expect(res.status).toBe(401);
     });
 
     it("/auth/me returns user when session valid", async () => {
         mockWorkOS(true);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/me", {
             headers: {
                 cookie: "wos-session=sealed.session.value",
             },
         });
         expect(res.status).toBe(200);
-        const json = await res.json();
+        const json = await res.json() as AuthMeResponse;
         expect(json.authenticated).toBe(true);
-        expect(json.user.id).toBe("user_123");
+        if (json.authenticated) {
+            expect(json.user.id).toBe("user_123");
+        }
     });
 
     it("/auth/organizations returns list when session valid", async () => {
         mockWorkOS(true);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/organizations", {
             headers: {
                 cookie: "wos-session=sealed.session.value",
             },
         });
         expect(res.status).toBe(200);
-        const json = await res.json();
+        const json = await res.json() as OrganizationsResponse;
         expect(json.authenticated).toBe(true);
-        expect(Array.isArray(json.organizations)).toBe(true);
-        expect(json.organizations.map((o: any) => o.id)).toEqual(['org_1', 'org_2']);
+        if (json.authenticated) {
+            expect(Array.isArray(json.organizations)).toBe(true);
+            expect(json.organizations.map((o: Organization) => o.id)).toEqual(['org_1', 'org_2']);
+        }
     });
 
     it("/auth/organizations 401s when no session cookie present", async () => {
         mockWorkOS(true);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/organizations");
         expect(res.status).toBe(401);
     });
 
     it("/auth/me 401s when session invalid", async () => {
         mockWorkOS(false);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
         const res = await app.request("http://localhost/auth/me", {
             headers: {
                 cookie: "wos-session=bad",
@@ -148,7 +153,7 @@ describe("auth routes", () => {
 
     it("/protected returns 200 after authenticating via callback", async () => {
         mockWorkOS(true);
-        const { app } = await import("../src/index");
+        const app = (await import("../index")).default;
 
         // Authenticate to receive the sealed session cookie
         const authRes = await app.request("http://localhost/auth/callback?code=valid_code");

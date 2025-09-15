@@ -85,5 +85,7 @@ export function createApp(env?: any) {
 	return app;
 }
 
-export const app = createApp();
+const app = createApp();
+
+export default app;
 export type AppType = ReturnType<typeof createApp>;

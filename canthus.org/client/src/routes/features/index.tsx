@@ -10,15 +10,32 @@ export const Route = createFileRoute('/features/')({
 
 function RouteComponent() {
     return (
-        <div className="min-h-screen">
-            <section className="py-16 md:py-20 lg:py-32">
-                <div className="container mx-auto px-4">
-                    <FeaturesHeader />
-                    <FeaturesGrid />
-                    <Integrations showTitle={true} />
-                    <FeaturesCTA />
-                </div>
-            </section>
+        <div className="min-h-screen bg-white dark:bg-neutral-950">
+            {/* Clean background */}
+            <div className="fixed inset-0 bg-neutral-50 dark:bg-neutral-950"></div>
+
+            <div className="relative z-10">
+                <section className="pt-24">
+                    <div className="container mx-auto px-6">
+                        <FeaturesHeader />
+                        <FeaturesGrid />
+                    </div>
+                </section>
+
+                {/* Platform Integration Section */}
+                <section className="bg-neutral-50 dark:bg-neutral-900/50">
+                    <div className="container mx-auto px-6">
+                        <Integrations showTitle={true} />
+                    </div>
+                </section>
+
+                {/* CTA Section */}
+                <section className="">
+                    <div className="container mx-auto px-6">
+                        <FeaturesCTA />
+                    </div>
+                </section>
+            </div>
         </div>
     )
 }

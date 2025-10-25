@@ -17,17 +17,17 @@ export default function NavBar({ isMobile }: { isMobile: boolean }) {
 
     return (
         <div className={`${isMobile ? "w-5xl max-w-7xl mx-auto px-4" : "px-6"}`}>
-            <div className="flex items-center justify-between h-16">
+            <div className="flex items-center justify-between h-16 border-b border-neutral-200 dark:border-neutral-800">
                 <div className="flex items-center">
-                    <a onClick={() => navigate({ to: "/" })} className="flex items-center gap-2 cursor-pointer">
+                    <a onClick={() => navigate({ to: "/" })} className="flex items-center gap-3 cursor-pointer group">
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <img src={fish} alt="logo" className="w-12 h-12" />
+                                <img src={fish} alt="Canthus" className="w-10 h-10 transition-opacity duration-200 group-hover:opacity-80" />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <div className="text-center">
-                                    <div className="font-semibold">Canthus v{versionInfo.version}</div>
-                                    <div className="text-xs opacity-80">{versionInfo.environment}</div>
+                                    <div className="font-medium">Canthus v{versionInfo.version}</div>
+                                    <div className="text-xs opacity-70">{versionInfo.environment}</div>
                                     {versionInfo.buildTime && (
                                         <div className="text-xs opacity-60">
                                             Built: {new Date(versionInfo.buildTime).toLocaleDateString()}
@@ -36,9 +36,9 @@ export default function NavBar({ isMobile }: { isMobile: boolean }) {
                                 </div>
                             </TooltipContent>
                         </Tooltip>
-                        <span className="font-semibold text-xl">Canthus</span>
+                        <span className="font-light text-xl tracking-tight text-neutral-900 dark:text-neutral-100">Canthus</span>
                     </a>
-                    <div className="mx-4">
+                    <div className="ml-6">
                         <ModeToggle />
                     </div>
                 </div>
@@ -46,25 +46,31 @@ export default function NavBar({ isMobile }: { isMobile: boolean }) {
                 {!isMobile && (
                     <div className="flex items-center gap-8">
                         <NavMenu />
-                        <div className="flex items-center gap-3 pl-4 border-l">
+                        <div className="flex items-center justify-end gap-4 ml-auto">
                             {isAuthenticated ? (
                                 <>
-                                    <Button className="bg-primary hover:bg-primary/90 rounded-lg" onClick={() => navigate({ to: "/app" })}>
+                                    <Button
+                                        variant="ghost"
+                                        className="text-base font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-200 px-4 py-2"
+                                        onClick={() => navigate({ to: "/app" })}
+                                    >
                                         Dashboard
                                     </Button>
-                                    <Button variant="outline" className="rounded-lg" onClick={() => logOut()}>
-                                        <Lock size={16} /> Log Out
+                                    <Button
+                                        variant="outline"
+                                        className="border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-900 transition-colors duration-200 text-base font-medium px-4 py-2"
+                                        onClick={() => logOut()}
+                                    >
+                                        <Lock size={16} /> Sign Out
                                     </Button>
                                 </>
                             ) : (
-                                <>
-                                    <Button variant="outline" className="rounded-lg" onClick={() => logIn()}>
-                                        <Lock size={16} /> Customer Login
-                                    </Button>
-                                    <Button className="bg-primary hover:bg-primary/90 rounded-lg" onClick={() => logIn()}>
-                                        Sign up
-                                    </Button>
-                                </>
+                                <Button
+                                    className="bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900 transition-colors duration-200 text-base font-medium px-6 py-2"
+                                    onClick={() => logIn()}
+                                >
+                                    Get Started
+                                </Button>
                             )}
                         </div>
                     </div>
@@ -72,11 +78,11 @@ export default function NavBar({ isMobile }: { isMobile: boolean }) {
 
                 {isMobile && (
                     <button
-                        className="p-2"
+                        className="p-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors duration-200"
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                 )}
@@ -84,17 +90,19 @@ export default function NavBar({ isMobile }: { isMobile: boolean }) {
 
             {
                 isMobile && isOpen && (
-                    <div className="py-4 border-t">
-                        <nav className="flex flex-col gap-4">
-                            <a href="/features" className="text-lg">Features</a>
-                            <a href="/about" className="text-lg">About</a>
-                            <a href="/pricing" className="text-lg">Pricing</a>
-                            <Button variant="outline" className="rounded-lg w-fit" onClick={() => logIn()}>
-                                <Lock className="w-4 h-4" /> Customer Login
-                            </Button>
-                            <Button className="bg-primary hover:bg-primary/90 rounded-lg w-fit" onClick={() => logIn()}>
-                                Sign up
-                            </Button>
+                    <div className="py-8 border-t border-neutral-200 dark:border-neutral-800">
+                        <nav className="flex flex-col gap-6">
+                            <a href="/features" className="text-xl font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors duration-200 py-2">Features</a>
+                            <a href="/about" className="text-xl font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors duration-200 py-2">About</a>
+                            <a href="/pricing" className="text-xl font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors duration-200 py-2">Pricing</a>
+                            <div className="pt-6 border-t border-neutral-200 dark:border-neutral-800">
+                                <Button
+                                    className="w-full bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900 transition-colors duration-200 text-base font-medium py-3"
+                                    onClick={() => logIn()}
+                                >
+                                    Get Started
+                                </Button>
+                            </div>
                         </nav>
                     </div>
                 )

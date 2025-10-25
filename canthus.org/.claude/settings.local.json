@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run type-check:*)",
+      "WebFetch(domain:anthropic.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

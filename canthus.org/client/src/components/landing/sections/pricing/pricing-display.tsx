@@ -1,14 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PricingDuration } from "@/lib/landing/pricing/types";
-import { Check, Star, Zap, TrendingUp, Sparkles } from "lucide-react";
+import { Check, Star, Zap } from "lucide-react";
 
 const plans = [
     {
-        name: "Platform Starter",
-        description: "Essential accessibility features for growing platforms",
+        name: "Professional",
+        description: "Comprehensive accessibility for established platforms",
         monthlyPrice: "$299",
         yearlyPrice: "$2,990",
         period: "/month",
@@ -16,36 +15,36 @@ const plans = [
         badge: null,
         icon: Zap,
         features: [
-            "Smart content recognition for images and documents",
-            "Basic language simplification tools",
-            "User preference storage and application",
+            "Automated content recognition and analysis",
             "WCAG 2.1 AA compliance monitoring",
-            "Standard API access",
+            "User preference management system",
+            "Standard API integration",
+            "Compliance reporting dashboard",
             "Email support"
         ],
-        cta: "Start Free Trial",
+        cta: "Get Started",
         popular: false,
         savings: 17
     },
     {
-        name: "Platform Pro",
-        description: "Advanced accessibility solutions for enterprise platforms",
+        name: "Enterprise",
+        description: "Advanced accessibility for large-scale operations",
         monthlyPrice: "$899",
         yearlyPrice: "$8,990",
         period: "/month",
         yearlyPeriod: "/year",
-        badge: "Most Popular",
+        badge: "Recommended",
         icon: Star,
         features: [
-            "All Starter features included",
+            "All Professional features included",
             "Real-time compliance monitoring",
-            "Advanced API & webhook integrations",
-            "White-label customization",
-            "Priority support with dedicated CSM",
+            "Advanced API and webhook integrations",
             "Custom accessibility rules engine",
-            "Multi-platform management dashboard"
+            "Dedicated customer success manager",
+            "Multi-platform management",
+            "Priority technical support"
         ],
-        cta: "Start Free Trial",
+        cta: "Contact Sales",
         popular: true,
         savings: 20
     }
@@ -62,134 +61,119 @@ export default function PricingDisplay({ duration, setDuration }: PricingDisplay
     };
 
     return (
-        <div className="max-w-6xl mx-auto">
-            <div className="flex justify-center mb-12">
+        <div className="max-w-5xl mx-auto">
+            <div className="flex justify-center mb-16">
                 <Tabs value={duration} onValueChange={handleTabChange} className="w-auto">
-                    <TabsList className="grid grid-cols-2 bg-muted/50 p-1">
+                    <TabsList className="grid grid-cols-2 bg-neutral-100 dark:bg-neutral-800 p-1 border border-neutral-200 dark:border-neutral-700">
                         <TabsTrigger
                             value="monthly"
-                            className="data-[state=active]:bg-background data-[state=active]:shadow-sm px-6"
+                            className="data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900 data-[state=active]:shadow-sm px-8 text-neutral-700 dark:text-neutral-300 data-[state=active]:text-neutral-900 dark:data-[state=active]:text-neutral-100 transition-all duration-200"
                         >
-                            Monthly
+                            Monthly Billing
                         </TabsTrigger>
                         <TabsTrigger
                             value="yearly"
-                            className="data-[state=active]:bg-background data-[state=active]:shadow-sm px-6 relative"
+                            className="data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900 data-[state=active]:shadow-sm px-8 relative text-neutral-700 dark:text-neutral-300 data-[state=active]:text-neutral-900 dark:data-[state=active]:text-neutral-100 transition-all duration-200"
                         >
-                            Yearly
+                            Annual Billing
                             <Badge
                                 variant="secondary"
-                                className="absolute -top-4 -right-10 bg-green-100 text-green-700 text-xs px-1.5 py-0.5"
+                                className="absolute -top-3 -right-16 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 text-xs px-2 py-1 border border-emerald-200 dark:border-emerald-700"
                             >
-                                Save 20%
+                                Save {plans[0].savings}%
                             </Badge>
                         </TabsTrigger>
                     </TabsList>
                 </Tabs>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
                 {plans.map((plan, index) => (
-                    <Card
+                    <div
                         key={index}
-                        className={`relative transition-all duration-300 ${plan.popular
-                            ? 'ring-2 ring-primary shadow-xl scale-105 border-primary'
-                            : 'border-border hover:shadow-lg hover:border-primary/50'
-                            }`}
+                        className={`
+                            relative p-8 border transition-all duration-200
+                            ${plan.popular
+                                ? "border-neutral-900 dark:border-neutral-100 bg-neutral-50 dark:bg-neutral-900"
+                                : "border-neutral-200 bg-white dark:bg-neutral-950 hover:border-neutral-400 dark:hover:border-neutral-600"
+                            }
+                        `}
                     >
                         {plan.popular && (
-                            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                                <Badge className="px-4 py-1.5 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg">
-                                    <Sparkles className="w-3 h-3 mr-1" />
-                                    Most Popular
-                                </Badge>
+                            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                <div className="px-4 py-1 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 text-xs font-medium tracking-wide uppercase">
+                                    {plan.badge}
+                                </div>
                             </div>
                         )}
 
-                        <CardHeader className="text-center pb-6 pt-8">
-                            <div className="flex justify-center mb-4">
-                                <div className={`p-4 rounded-2xl ${plan.popular
-                                    ? 'bg-gradient-to-br from-primary/10 to-primary/5'
-                                    : 'bg-muted/50'
-                                    }`}>
-                                    <plan.icon className={`h-8 w-8 ${plan.popular ? 'text-primary' : 'text-muted-foreground'
-                                        }`} />
+                        <div className="text-center mb-8">
+                            <div className="flex justify-center mb-6">
+                                <div className="p-4 border border-neutral-200 dark:border-neutral-700">
+                                    <plan.icon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
                                 </div>
                             </div>
-                            <CardTitle className="text-2xl font-bold mb-2">{plan.name}</CardTitle>
-                            <CardDescription className="text-base px-4 leading-relaxed">
+                            <h3 className="text-2xl font-light tracking-tight text-neutral-900 dark:text-neutral-100 mb-3">
+                                {plan.name}
+                            </h3>
+                            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
                                 {plan.description}
-                            </CardDescription>
-                        </CardHeader>
+                            </p>
+                        </div>
 
-                        <CardContent className="px-6 pb-8">
-                            <div className="text-center mb-8">
-                                <div className="flex items-baseline justify-center mb-2">
-                                    <span className="text-5xl font-bold tracking-tight">
-                                        {duration === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
-                                    </span>
-                                    <span className="text-muted-foreground ml-2 text-lg">
-                                        {duration === "monthly" ? plan.period : plan.yearlyPeriod}
-                                    </span>
-                                </div>
+                        <div className="text-center mb-8">
+                            <div className="flex items-baseline justify-center mb-3">
+                                <span className="text-5xl font-light tracking-tight text-neutral-900 dark:text-neutral-100">
+                                    {duration === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
+                                </span>
+                                <span className="text-neutral-600 dark:text-neutral-400 ml-2 text-lg">
+                                    {duration === "monthly" ? plan.period : plan.yearlyPeriod}
+                                </span>
+                            </div>
 
-                                {duration === "yearly" && (
-                                    <div className="flex items-center justify-center gap-2">
-                                        <Badge
-                                            variant="outline"
-                                            className="bg-green-50 text-green-700 border-green-200 px-3 py-1"
-                                        >
-                                            <TrendingUp className="w-3 h-3 mr-1" />
-                                            Save {plan.savings}%
-                                        </Badge>
-                                        <span className="text-sm text-muted-foreground">
-                                            vs monthly
-                                        </span>
+                            {duration === "yearly" && (
+                                <div className="flex items-center justify-center gap-2">
+                                    <div className="px-3 py-1 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 text-xs font-medium border border-emerald-200 dark:border-emerald-700">
+                                        Save {plan.savings}% annually
                                     </div>
-                                )}
+                                </div>
+                            )}
+                        </div>
 
-                                {duration === "monthly" && (
-                                    <p className="text-sm text-muted-foreground">
-                                        {plan.yearlyPrice} when billed annually
-                                    </p>
-                                )}
-                            </div>
+                        <Button
+                            className={`
+                                w-full mb-8 text-base font-medium transition-all duration-200
+                                ${plan.popular
+                                    ? "bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900"
+                                    : "border border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                                }
+                            `}
+                            variant={plan.popular ? "default" : "outline"}
+                        >
+                            {plan.cta}
+                        </Button>
 
-                            <Button
-                                className={`w-full mb-8 text-base font-medium ${plan.popular
-                                    ? 'bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-primary-foreground shadow-lg'
-                                    : 'border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5'
-                                    } transition-all duration-200 h-12`}
-                                variant={plan.popular ? "default" : "outline"}
-                            >
-                                {plan.cta}
-                            </Button>
-
-                            <div className="space-y-4">
-                                <h4 className="font-semibold text-sm text-center mb-4 text-muted-foreground">
-                                    Everything you need to get started
-                                </h4>
-                                <ul className="space-y-3">
-                                    {plan.features.map((feature, featureIndex) => (
-                                        <li key={featureIndex} className="flex items-start gap-3">
-                                            <div className="flex-shrink-0 mt-0.5">
-                                                <Check className="h-4 w-4 text-green-500" />
-                                            </div>
-                                            <span className="text-sm text-foreground/80 leading-relaxed">
-                                                {feature}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </CardContent>
-                    </Card>
+                        <div className="space-y-4">
+                            <ul className="space-y-4">
+                                {plan.features.map((feature, featureIndex) => (
+                                    <li key={featureIndex} className="flex items-start gap-3">
+                                        <div className="flex-shrink-0 mt-0.5">
+                                            <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                                        </div>
+                                        <span className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                                            {feature}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
                 ))}
             </div>
 
-            <div className="text-center mt-16">
-                <p className="text-sm text-muted-foreground">
-                    All plans include a 14-day free trial • No credit card required
+            <div className="text-center pt-8 border-t border-neutral-200 dark:border-neutral-800">
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                    14-day free trial • No credit card required • Cancel anytime
                 </p>
             </div>
         </div>

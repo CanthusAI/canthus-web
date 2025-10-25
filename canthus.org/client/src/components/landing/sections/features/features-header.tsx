@@ -1,22 +1,13 @@
-import { Badge } from "@/components/ui/badge";
-
 export default function FeaturesHeader() {
-    return (
-        <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4">
-                Features
-            </Badge>
-            <h2 className="text-3xl font-bold md:text-4xl lg:text-5xl mb-6">
-                Platform accessibility{" "}
-                <span className="relative">
-                    <span className="relative z-10">made simple</span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-background blur-md opacity-20"></span>
-                </span>
-            </h2>
-            <p className="text-muted-foreground text-balance md:text-lg max-w-3xl mx-auto">
-                Canthus provides comprehensive accessibility solutions for vertical SaaS platforms, helping businesses serve customers with diverse needs
-                through seamless integrations and powerful accessibility features.
-            </p>
-        </div>
-    );
+	return (
+		<div className="text-center mb-20">
+			<h1 className="text-4xl font-medium tracking-tight text-neutral-900 dark:text-neutral-100 mb-6">
+				Enterprise accessibility without complexity
+			</h1>
+			<p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+				Address compliance requirements and serve all users effectively. Our solutions integrate seamlessly with your existing infrastructure
+				to provide comprehensive accessibility without disrupting your operations.
+			</p>
+		</div>
+	);
 }

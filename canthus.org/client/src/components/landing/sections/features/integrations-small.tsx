@@ -1,6 +1,16 @@
-const integrations = [
-    { name: "Socotra", logo: "🛡️", category: "Insurance", status: "live" },
-    { name: "Clio", logo: "⚖️", category: "Legal", status: "coming-soon" }
+import { ReactNode } from "react";
+import { SocotraLogo, ClioLogo } from "@/components/logos";
+
+interface Integration {
+    name: string;
+    logo: ReactNode;
+    category: string;
+    status: "live" | "coming-soon" | "planned";
+}
+
+const integrations: Integration[] = [
+    { name: "Socotra", logo: <SocotraLogo size="md" />, category: "Insurance", status: "live" },
+    { name: "Clio", logo: <ClioLogo size="md" />, category: "Legal", status: "coming-soon" }
 ];
 
 interface IntegrationsSmallProps {
@@ -20,24 +30,71 @@ export default function IntegrationsSmall({ showTitle = false }: IntegrationsSma
                     </p>
                 </>
             )}
-            <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
+            <div className="grid grid-cols-2 gap-8 max-w-md mx-auto">
                 {integrations.map((integration, index) => (
                     <div
                         key={index}
-                        className="flex flex-col items-center gap-2 p-4 rounded-lg border bg-card hover:bg-accent transition-colors"
+                        className={`
+                            relative flex flex-col items-center gap-4 p-6 border transition-all duration-200 hover:border-opacity-60
+                            ${integration.status === "live"
+                                ? "border-neutral-200 bg-neutral-50 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/70"
+                                : integration.status === "coming-soon"
+                                ? "border-orange-200 bg-orange-50/30 hover:bg-orange-50/50 dark:border-orange-800/30 dark:bg-orange-950/20 dark:hover:bg-orange-950/30"
+                                : "border-neutral-200 bg-neutral-50/50 hover:bg-neutral-100/50 dark:border-neutral-800/50 dark:bg-neutral-900/30 dark:hover:bg-neutral-900/40"
+                            }
+                        `}
                     >
-                        <span className="text-2xl">{integration.logo}</span>
-                        <span className="text-sm font-medium">{integration.name}</span>
-                        <span className="text-xs text-muted-foreground">{integration.category}</span>
-                        {integration.status === "live" && (
-                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Live</span>
-                        )}
-                        {integration.status === "coming-soon" && (
-                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Coming Soon</span>
-                        )}
-                        {integration.status === "planned" && (
-                            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Planned</span>
-                        )}
+                        {/* Minimal status indicator */}
+                        <div className="absolute top-4 right-4">
+                            {integration.status === "live" && (
+                                <div className="w-1 h-1 bg-emerald-600 rounded-full"></div>
+                            )}
+                            {integration.status === "coming-soon" && (
+                                <div className="w-1 h-1 bg-orange-500 rounded-full"></div>
+                            )}
+                            {integration.status === "planned" && (
+                                <div className="w-1 h-1 bg-neutral-400 rounded-full"></div>
+                            )}
+                        </div>
+
+                        {/* Logo - clean and simple */}
+                        <div className={`
+                            flex items-center justify-center transition-opacity duration-200
+                            ${integration.status === "live"
+                                ? "opacity-90"
+                                : "opacity-70"
+                            }
+                        `}>
+                            {integration.logo}
+                        </div>
+
+                        <div className="text-center space-y-1">
+                            <h4 className="text-base font-light tracking-tight text-neutral-900 dark:text-neutral-100">
+                                {integration.name}
+                            </h4>
+                            <p className={`
+                                text-xs font-medium tracking-wide uppercase
+                                ${integration.status === "live"
+                                    ? "text-emerald-700 dark:text-emerald-300"
+                                    : integration.status === "coming-soon"
+                                    ? "text-orange-700 dark:text-orange-300"
+                                    : "text-neutral-600 dark:text-neutral-500"
+                                }
+                            `}>
+                                {integration.category}
+                            </p>
+                        </div>
+
+                        {/* Bottom divider */}
+                        <div className={`
+                            w-full h-px mt-auto
+                            ${integration.status === "live"
+                                ? "bg-neutral-200 dark:bg-neutral-700"
+                                : integration.status === "coming-soon"
+                                ? "bg-orange-200 dark:bg-orange-800/30"
+                                : "bg-neutral-200 dark:bg-neutral-700/50"
+                            }
+                        `}></div>
                     </div>
                 ))}
             </div>

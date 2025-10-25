@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Users,
     CheckCircle,
@@ -9,46 +8,51 @@ import {
 const impactStats = [
     {
         icon: Users,
-        title: "Market Opportunity",
+        title: "Addressable Market",
         value: "$1.3B",
-        description: "Accessibility market size for SaaS platforms by 2027"
+        description: "Accessibility solutions market for vertical SaaS platforms by 2027"
     },
     {
         icon: CheckCircle,
-        title: "Accessibility Rules",
+        title: "Compliance Standards",
         value: "78+",
-        description: "WCAG 2.1 AA guidelines automatically monitored and fixed"
+        description: "WCAG 2.1 AA guidelines automatically monitored and enforced"
     },
     {
         icon: Heart,
-        title: "People with Disabilities",
+        title: "Global Users",
         value: "1.3B",
-        description: "Worldwide population that benefits from accessible technology"
+        description: "People worldwide who benefit from accessible technology"
     },
     {
         icon: Clock,
-        title: "Development Time",
+        title: "Implementation Efficiency",
         value: "90%",
-        description: "Reduction in time needed to implement accessibility features"
+        description: "Reduction in development time for accessibility features"
     }
 ];
 
 export default function ImpactStats() {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {impactStats.map((stat, index) => (
-                <Card key={index} className="text-center">
-                    <CardHeader className="pb-4">
-                        <div className="mx-auto p-3 bg-primary/10 rounded-lg w-fit mb-4">
-                            <stat.icon className="h-8 w-8 text-primary" />
+                <div
+                    key={index}
+                    className="text-center p-8 border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/70 transition-colors duration-200"
+                >
+                    <div className="flex flex-col items-center space-y-4">
+                        <stat.icon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
+                        <div className="text-3xl font-light tracking-tight text-neutral-900 dark:text-neutral-100">
+                            {stat.value}
                         </div>
-                        <div className="text-3xl font-bold text-primary mb-2">{stat.value}</div>
-                        <CardTitle className="text-lg">{stat.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-sm text-muted-foreground">{stat.description}</p>
-                    </CardContent>
-                </Card>
+                        <h3 className="text-sm font-medium tracking-wide uppercase text-neutral-700 dark:text-neutral-300">
+                            {stat.title}
+                        </h3>
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                            {stat.description}
+                        </p>
+                    </div>
+                </div>
             ))}
         </div>
     );

@@ -10,7 +10,7 @@ export default function NavMenu() {
     return (
 
         <NavigationMenu>
-            <NavigationMenuList className="flex items-center gap-4">
+            <NavigationMenuList className="flex items-center gap-6">
                 {items.map((item) => (
                     <NavItem key={item.href} text={item.text} href={item.href} />
                 ))}

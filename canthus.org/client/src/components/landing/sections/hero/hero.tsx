@@ -1,64 +1,58 @@
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import { HeroVideoDialog } from "./hero-video-dialog";
+import { useAuth } from "@/components/auth/context";
 
 export default function Hero() {
-  return (
-    <section className="py-16 md:py-20 lg:py-32">
-      <div className="container mx-auto px-4 text-center">
-        <div className="mx-auto flex max-w-3xl flex-col gap-4 lg:gap-6">
-          <h1 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-            One-Click Clarity for{" "}
-            <span className="relative">
-              <span className="relative z-10">Everyone</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-background blur-md opacity-35"></span>
-            </span>
-          </h1>
-          <p className="text-muted-foreground text-balance md:text-lg">
-            Accessibility solutions <span className="font-bold">built for the platforms your team already uses.</span>
-          </p>
-        </div>
+	const { logIn } = useAuth();
+	return (
+		<section className="pt-16 pb-24 md:pt-20 md:pb-32 lg:pt-24 lg:pb-32">
+			<div className="container mx-auto px-4 text-center">
+				<div className="mx-auto flex max-w-4xl flex-col gap-8 lg:gap-12">
+					<div className="space-y-6">
+						<h1 className="text-4xl font-light md:text-5xl lg:text-6xl tracking-tight text-neutral-900 dark:text-neutral-100">
+							Accessibility compliance{" "}
+							<span className="font-medium">for modern platforms</span>
+						</h1>
+						<p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed">
+							Enterprise-grade accessibility solutions designed for vertical SaaS platforms.
+							Ensure compliance, serve all users, and expand your market reach without disrupting existing workflows.
+						</p>
+					</div>
 
-        <div className="mt-8 flex flex-col items-center gap-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg">
-              <a href="#">Start Building Inclusively</a>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <a href="#" className="flex items-center gap-2">
-                <ExternalLink className="h-4 w-4" />
-                Try Demo
-              </a>
-            </Button>
-          </div>
+					<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+						<Button asChild size="lg" className="bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900 transition-colors duration-200">
+							<a href="#" onClick={() => logIn()}>Get Started</a>
 
-          <p className="text-xs text-muted-foreground">
-            Free trial available
-          </p>
+						</Button>
+						<Button asChild variant="outline" size="lg" className="border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-900 transition-colors duration-200">
+							<a href="#" className="flex items-center gap-2">
+								<ExternalLink className="h-4 w-4" />
+								View Documentation
+							</a>
+						</Button>
+					</div>
 
-          <div className="relative mt-8">
-            <div className="relative z-10 overflow-hidden group rounded-lg">
-              <div className="relative">
-                <HeroVideoDialog
-                  className="dark:hidden block"
-                  animationStyle="from-center"
-                  videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                  thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
-                  thumbnailAlt="Hero Video"
-                />
-                <HeroVideoDialog
-                  className="hidden dark:block"
-                  animationStyle="from-center"
-                  videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                  thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
-                  thumbnailAlt="Hero Video"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  );
+					<div className="relative mt-12">
+						<div className="overflow-hidden border border-neutral-200 dark:border-neutral-800">
+							<HeroVideoDialog
+								className="dark:hidden block"
+								animationStyle="from-center"
+								videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+								thumbnailSrc="https://startup-template-sage.vercel.app/hero-light.png"
+								thumbnailAlt="Platform Integration Demo"
+							/>
+							<HeroVideoDialog
+								className="hidden dark:block"
+								animationStyle="from-center"
+								videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
+								thumbnailSrc="https://startup-template-sage.vercel.app/hero-dark.png"
+								thumbnailAlt="Platform Integration Demo"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
 }

@@ -1,29 +1,28 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Shield, Target } from "lucide-react";
 
 const insights = [
     {
         icon: TrendingUp,
-        title: "Growing Market Need",
+        title: "Compliance Risk",
         stat: "71%",
-        description: "71% of companies face accessibility lawsuits due to non-compliant platforms",
-        source: "WebAIM 2024 Report",
+        description: "Companies face accessibility challenges due to non-compliant platforms",
+        source: "WebAIM 2024",
         url: "https://webaim.org/projects/"
     },
     {
         icon: Shield,
-        title: "Compliance Gap",
+        title: "Implementation Gap",
         stat: "98%",
-        description: "98% of top websites fail basic accessibility standards",
-        source: "WebAIM Million Analysis",
+        description: "Digital platforms fail to meet basic accessibility standards",
+        source: "WebAIM Analysis",
         url: "https://webaim.org/projects/million/"
     },
     {
         icon: Target,
-        title: "Revenue Opportunity",
+        title: "Market Potential",
         stat: "$13T",
-        description: "The global spending power of people with disabilities",
-        source: "Return on Disability Report",
+        description: "Annual disposable income of the global disability community",
+        source: "Global Economics Report",
         url: "https://www.rod-group.com/research-insights/annual-report-2024/"
     }
 ];
@@ -33,23 +32,37 @@ export default function MarketInsights() {
         <div className="mb-20">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {insights.map((insight, index) => (
-                    <Card key={index} className="h-full text-center">
-                        <CardHeader>
-                            <div className="mx-auto p-3 bg-primary/10 rounded-lg w-fit mb-4">
-                                <insight.icon className="h-8 w-8 text-primary" />
+                    <div
+                        key={index}
+                        className="p-8 border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/70 transition-colors duration-200"
+                    >
+                        <div className="text-center space-y-6">
+                            <div className="flex flex-col items-center space-y-4">
+                                <insight.icon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
+                                <div className="text-4xl font-light tracking-tight text-neutral-900 dark:text-neutral-100">
+                                    {insight.stat}
+                                </div>
                             </div>
-                            <div className="text-4xl font-bold text-primary mb-2">{insight.stat}</div>
-                            <CardTitle className="text-lg">{insight.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-                                {insight.description}
-                            </p>
-                            <p className="text-xs text-muted-foreground font-medium">
-                                Source: <a href={insight.url} target="_blank" rel="noopener noreferrer" className="font-bold text-primary hover:underline">{insight.source}</a>
-                            </p>
-                        </CardContent>
-                    </Card>
+                            <div className="space-y-3">
+                                <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100">
+                                    {insight.title}
+                                </h3>
+                                <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                                    {insight.description}
+                                </p>
+                                <p className="text-xs text-neutral-500 dark:text-neutral-500">
+                                    <a
+                                        href={insight.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:text-neutral-700 dark:hover:text-neutral-300 underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 transition-colors duration-200"
+                                    >
+                                        Source: {insight.source}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 ))}
             </div>
         </div>

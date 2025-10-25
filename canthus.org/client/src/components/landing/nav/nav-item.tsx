@@ -33,7 +33,12 @@ export default function NavItem({ text, href, items }: NavItemProps) {
 
     return (
         <NavigationMenuItem>
-            <NavigationMenuLink className="px-2 text-md rounded-lg hover:bg-accent/90 hover:cursor-pointer" onClick={() => navigate({ to: href })}>{text}</NavigationMenuLink>
+            <NavigationMenuLink
+                className="px-4 py-2 text-base font-medium rounded-lg hover:bg-accent/90 hover:cursor-pointer transition-colors duration-200"
+                onClick={() => navigate({ to: href })}
+            >
+                {text}
+            </NavigationMenuLink>
         </NavigationMenuItem>
     );
 }

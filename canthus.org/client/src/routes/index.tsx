@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import Hero from "@/components/landing/sections/hero/hero";
 import ImpactStats from "@/components/landing/sections/impact/impact-stats";
 import MarketInsights from "@/components/landing/sections/impact/market-insights";
-import IntegrationsSmall from "@/components/landing/sections/features/integrations-small";
+import Integrations from "@/components/landing/sections/features/integrations";
 import Footer from "@/components/landing/sections/footer";
+import FinalCTA from "@/components/landing/sections/hero/final-cta";
 
 
 export const Route = createFileRoute("/")({
@@ -13,9 +14,9 @@ export const Route = createFileRoute("/")({
 function Index() {
 
 	return (
-		<div className="w-full mx-auto flex flex-col items-center relative bg-white dark:bg-neutral-900">
+		<div className="w-full mx-auto flex flex-col items-center relative bg-background">
 			{/* Clean background */}
-			<div className="fixed inset-0 bg-neutral-50 dark:bg-neutral-950"></div>
+			<div className="fixed inset-0 bg-background"></div>
 
 			<div className="relative z-10 w-full">
 				<Hero />
@@ -24,10 +25,10 @@ function Index() {
 				<section className="py-24">
 					<div className="container mx-auto px-6">
 						<div className="text-center mb-20">
-							<h2 className="text-3xl font-light tracking-tight text-neutral-900 dark:text-neutral-100 mb-6">
+							<h2 className="text-3xl font-light tracking-tight text-foreground mb-6">
 								The accessibility imperative
 							</h2>
-							<p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+							<p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
 								Digital accessibility is no longer optional. As regulatory requirements increase and user expectations evolve,
 								platforms that prioritize accessibility gain significant competitive advantages.
 							</p>
@@ -39,23 +40,27 @@ function Index() {
 				</section>
 
 				{/* Platform Integration Section */}
-				<section className="py-24 bg-neutral-50 dark:bg-neutral-900/50">
+				<section className="py-24 bg-muted/30">
 					<div className="container mx-auto px-6">
 						<div className="text-center mb-16">
-							<h2 className="text-3xl font-light tracking-tight text-neutral-900 dark:text-neutral-100 mb-6">
+							<h2 className="text-3xl font-light tracking-tight text-foreground mb-6">
 								Platform integration
 							</h2>
-							<p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+							<p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
 								Seamlessly integrate with leading vertical SaaS platforms. Our solutions work within your existing infrastructure
 								to provide comprehensive accessibility features without disrupting established workflows.
 							</p>
 						</div>
-						<IntegrationsSmall />
+						<Integrations showTitle={false} />
 					</div>
 				</section>
 
-			{/* Footer */}
-			<Footer />
+
+				<div className="container mx-auto mb-32">
+					<FinalCTA />
+				</div>
+				{/* Footer */}
+				<Footer />
 			</div>
 		</div>
 	);

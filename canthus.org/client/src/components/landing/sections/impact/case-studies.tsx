@@ -37,15 +37,15 @@ export default function CaseStudies() {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div>
-                                <h4 className="font-semibold text-sm mb-2 text-red-600">Problem</h4>
+                                <h4 className="font-semibold text-sm mb-2 text-destructive">Problem</h4>
                                 <p className="text-sm text-muted-foreground">{capability.problem}</p>
                             </div>
                             <div>
-                                <h4 className="font-semibold text-sm mb-2 text-blue-600">Solution</h4>
+                                <h4 className="font-semibold text-sm mb-2 text-primary">Solution</h4>
                                 <p className="text-sm text-muted-foreground">{capability.solution}</p>
                             </div>
                             <div>
-                                <h4 className="font-semibold text-sm mb-2 text-green-600">Impact</h4>
+                                <h4 className="font-semibold text-sm mb-2 text-accent">Impact</h4>
                                 <p className="text-sm text-muted-foreground">{capability.impact}</p>
                             </div>
                         </CardContent>

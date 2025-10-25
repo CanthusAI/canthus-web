@@ -38,17 +38,17 @@ export default function ImpactStats() {
             {impactStats.map((stat, index) => (
                 <div
                     key={index}
-                    className="text-center p-8 border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/70 transition-colors duration-200"
+                    className="text-center p-8 border border-border bg-card hover:bg-accent/20 transition-colors duration-200"
                 >
                     <div className="flex flex-col items-center space-y-4">
-                        <stat.icon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
-                        <div className="text-3xl font-light tracking-tight text-neutral-900 dark:text-neutral-100">
+                        <stat.icon className="h-6 w-6 text-muted-foreground" />
+                        <div className="text-3xl font-light tracking-tight text-foreground">
                             {stat.value}
                         </div>
-                        <h3 className="text-sm font-medium tracking-wide uppercase text-neutral-700 dark:text-neutral-300">
+                        <h3 className="text-sm font-medium tracking-wide uppercase text-muted-foreground">
                             {stat.title}
                         </h3>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                             {stat.description}
                         </p>
                     </div>

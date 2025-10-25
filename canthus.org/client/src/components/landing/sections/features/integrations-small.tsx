@@ -37,23 +37,23 @@ export default function IntegrationsSmall({ showTitle = false }: IntegrationsSma
                         className={`
                             relative flex flex-col items-center gap-4 p-6 border transition-all duration-200 hover:border-opacity-60
                             ${integration.status === "live"
-                                ? "border-neutral-200 bg-neutral-50 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/70"
+                                ? "border-border bg-card hover:bg-accent/20"
                                 : integration.status === "coming-soon"
-                                ? "border-orange-200 bg-orange-50/30 hover:bg-orange-50/50 dark:border-orange-800/30 dark:bg-orange-950/20 dark:hover:bg-orange-950/30"
-                                : "border-neutral-200 bg-neutral-50/50 hover:bg-neutral-100/50 dark:border-neutral-800/50 dark:bg-neutral-900/30 dark:hover:bg-neutral-900/40"
+                                ? "border-accent bg-accent/10 hover:bg-accent/20"
+                                : "border-border bg-muted/50 hover:bg-muted/70"
                             }
                         `}
                     >
                         {/* Minimal status indicator */}
                         <div className="absolute top-4 right-4">
                             {integration.status === "live" && (
-                                <div className="w-1 h-1 bg-emerald-600 rounded-full"></div>
+                                <div className="w-1 h-1 bg-primary rounded-full"></div>
                             )}
                             {integration.status === "coming-soon" && (
-                                <div className="w-1 h-1 bg-orange-500 rounded-full"></div>
+                                <div className="w-1 h-1 bg-accent rounded-full"></div>
                             )}
                             {integration.status === "planned" && (
-                                <div className="w-1 h-1 bg-neutral-400 rounded-full"></div>
+                                <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
                             )}
                         </div>
 
@@ -69,16 +69,16 @@ export default function IntegrationsSmall({ showTitle = false }: IntegrationsSma
                         </div>
 
                         <div className="text-center space-y-1">
-                            <h4 className="text-base font-light tracking-tight text-neutral-900 dark:text-neutral-100">
+                            <h4 className="text-base font-light tracking-tight text-foreground">
                                 {integration.name}
                             </h4>
                             <p className={`
                                 text-xs font-medium tracking-wide uppercase
                                 ${integration.status === "live"
-                                    ? "text-emerald-700 dark:text-emerald-300"
+                                    ? "text-primary"
                                     : integration.status === "coming-soon"
-                                    ? "text-orange-700 dark:text-orange-300"
-                                    : "text-neutral-600 dark:text-neutral-500"
+                                    ? "text-accent"
+                                    : "text-muted-foreground"
                                 }
                             `}>
                                 {integration.category}
@@ -89,10 +89,10 @@ export default function IntegrationsSmall({ showTitle = false }: IntegrationsSma
                         <div className={`
                             w-full h-px mt-auto
                             ${integration.status === "live"
-                                ? "bg-neutral-200 dark:bg-neutral-700"
+                                ? "bg-border"
                                 : integration.status === "coming-soon"
-                                ? "bg-orange-200 dark:bg-orange-800/30"
-                                : "bg-neutral-200 dark:bg-neutral-700/50"
+                                ? "bg-accent/30"
+                                : "bg-border/50"
                             }
                         `}></div>
                     </div>

@@ -64,16 +64,16 @@ export default function PricingDisplay({ duration, setDuration }: PricingDisplay
         <div className="max-w-5xl mx-auto">
             <div className="flex justify-center mb-16">
                 <Tabs value={duration} onValueChange={handleTabChange} className="w-auto">
-                    <TabsList className="grid grid-cols-2 bg-neutral-100 dark:bg-neutral-800 p-1 border border-neutral-200 dark:border-neutral-700">
+                    <TabsList className="grid grid-cols-2 bg-muted p-1 border border-border">
                         <TabsTrigger
                             value="monthly"
-                            className="data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900 data-[state=active]:shadow-sm px-8 text-neutral-700 dark:text-neutral-300 data-[state=active]:text-neutral-900 dark:data-[state=active]:text-neutral-100 transition-all duration-200"
+                            className="data-[state=active]:bg-background data-[state=active]:shadow-sm px-8 text-muted-foreground data-[state=active]:text-foreground transition-all duration-200"
                         >
                             Monthly Billing
                         </TabsTrigger>
                         <TabsTrigger
                             value="yearly"
-                            className="data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-900 data-[state=active]:shadow-sm px-8 relative text-neutral-700 dark:text-neutral-300 data-[state=active]:text-neutral-900 dark:data-[state=active]:text-neutral-100 transition-all duration-200"
+                            className="data-[state=active]:bg-background data-[state=active]:shadow-sm px-8 relative text-muted-foreground data-[state=active]:text-foreground transition-all duration-200"
                         >
                             Annual Billing
                             <Badge
@@ -94,14 +94,14 @@ export default function PricingDisplay({ duration, setDuration }: PricingDisplay
                         className={`
                             relative p-8 border transition-all duration-200
                             ${plan.popular
-                                ? "border-neutral-900 dark:border-neutral-100 bg-neutral-50 dark:bg-neutral-900"
-                                : "border-neutral-200 bg-white dark:bg-neutral-950 hover:border-neutral-400 dark:hover:border-neutral-600"
+                                ? "border-primary bg-card"
+                                : "border-border bg-card hover:border-accent"
                             }
                         `}
                     >
                         {plan.popular && (
                             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                                <div className="px-4 py-1 bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 text-xs font-medium tracking-wide uppercase">
+                                <div className="px-4 py-1 bg-primary text-primary-foreground text-xs font-medium tracking-wide uppercase">
                                     {plan.badge}
                                 </div>
                             </div>
@@ -141,13 +141,7 @@ export default function PricingDisplay({ duration, setDuration }: PricingDisplay
                         </div>
 
                         <Button
-                            className={`
-                                w-full mb-8 text-base font-medium transition-all duration-200
-                                ${plan.popular
-                                    ? "bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900"
-                                    : "border border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
-                                }
-                            `}
+                            className="w-full mb-8 text-base font-medium transition-all duration-200"
                             variant={plan.popular ? "default" : "outline"}
                         >
                             {plan.cta}

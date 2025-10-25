@@ -34,28 +34,28 @@ export default function MarketInsights() {
                 {insights.map((insight, index) => (
                     <div
                         key={index}
-                        className="p-8 border border-neutral-200 bg-neutral-50 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:bg-neutral-900/70 transition-colors duration-200"
+                        className="p-8 border border-border bg-card hover:bg-accent/20 transition-colors duration-200"
                     >
                         <div className="text-center space-y-6">
                             <div className="flex flex-col items-center space-y-4">
-                                <insight.icon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
-                                <div className="text-4xl font-light tracking-tight text-neutral-900 dark:text-neutral-100">
+                                <insight.icon className="h-6 w-6 text-muted-foreground" />
+                                <div className="text-4xl font-light tracking-tight text-foreground">
                                     {insight.stat}
                                 </div>
                             </div>
                             <div className="space-y-3">
-                                <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100">
+                                <h3 className="text-lg font-medium text-foreground">
                                     {insight.title}
                                 </h3>
-                                <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                                <p className="text-sm text-muted-foreground leading-relaxed">
                                     {insight.description}
                                 </p>
-                                <p className="text-xs text-neutral-500 dark:text-neutral-500">
+                                <p className="text-xs text-muted-foreground">
                                     <a
                                         href={insight.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="hover:text-neutral-700 dark:hover:text-neutral-300 underline decoration-neutral-300 dark:decoration-neutral-600 underline-offset-2 transition-colors duration-200"
+                                        className="hover:text-foreground underline decoration-border underline-offset-2 transition-colors duration-200"
                                     >
                                         Source: {insight.source}
                                     </a>
